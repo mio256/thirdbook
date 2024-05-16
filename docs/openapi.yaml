@@ -8,6 +8,28 @@ servers:
     description: Main production server
 
 paths:
+  /ping:
+    get:
+      summary: Ping the server
+      description: Check if the server is running.
+      responses:
+        '200':
+          description: Server is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Response message
+        default:
+          description: General Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /bookings:
     get:
       summary: List all bookings

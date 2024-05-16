@@ -383,6 +383,21 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+type PingGetOK struct {
+	// Response message.
+	Message OptString `json:"message"`
+}
+
+// GetMessage returns the value of Message.
+func (s *PingGetOK) GetMessage() OptString {
+	return s.Message
+}
+
+// SetMessage sets the value of Message.
+func (s *PingGetOK) SetMessage(val OptString) {
+	s.Message = val
+}
+
 // Ref: #/components/schemas/UpdateBooking
 type UpdateBooking struct {
 	// Name of the event.

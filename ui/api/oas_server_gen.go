@@ -38,6 +38,12 @@ type Handler interface {
 	//
 	// POST /bookings
 	BookingsPost(ctx context.Context, req *NewBooking) (*Booking, error)
+	// PingGet implements GET /ping operation.
+	//
+	// Check if the server is running.
+	//
+	// GET /ping
+	PingGet(ctx context.Context) (*PingGetOK, error)
 	// UsersLoginPost implements POST /users/login operation.
 	//
 	// Authenticate a user and generate a token.

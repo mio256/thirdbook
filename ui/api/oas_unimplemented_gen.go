@@ -58,6 +58,15 @@ func (UnimplementedHandler) BookingsPost(ctx context.Context, req *NewBooking) (
 	return r, ht.ErrNotImplemented
 }
 
+// PingGet implements GET /ping operation.
+//
+// Check if the server is running.
+//
+// GET /ping
+func (UnimplementedHandler) PingGet(ctx context.Context) (r *PingGetOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // UsersLoginPost implements POST /users/login operation.
 //
 // Authenticate a user and generate a token.
