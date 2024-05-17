@@ -17,3 +17,36 @@ func (q *Queries) Ping(ctx context.Context) error {
 	_, err := q.db.Exec(ctx, ping)
 	return err
 }
+
+const testCreateUser = `-- name: TestCreateUser :one
+insert into users (name, email, password) values ($1, $2, $3) returning id, name, email, password, created_at, updated_at
+`
+
+type TestCreateUserParams struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (q *Queries) TestCreateUser(ctx context.Context, arg TestCreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, testCreateUser, arg.Name, arg.Email, arg.Password)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
+const testDeleteUser = `-- name: TestDeleteUser :exec
+delete from users where id = $1
+`
+
+func (q *Queries) TestDeleteUser(ctx context.Context, id int64) error {
+	_, err := q.db.Exec(ctx, testDeleteUser, id)
+	return err
+}

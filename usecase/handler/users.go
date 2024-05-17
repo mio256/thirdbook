@@ -51,7 +51,17 @@ func (h *Handler) UsersPost(ctx context.Context, req *api.NewUser) (*api.User, e
 }
 
 func (h *Handler) UsersUserIdDelete(ctx context.Context, params api.UsersUserIdDeleteParams) (api.UsersUserIdDeleteRes, error) {
-	panic("not implemented")
+	id, err := strconv.ParseUint(params.UserId, 10, 64)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
+	err = h.repo.DeleteUser(ctx, int64(id))
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
+	return &api.UsersUserIdDeleteNoContent{}, nil
 }
 
 func (h *Handler) UsersUserIdGet(ctx context.Context, params api.UsersUserIdGetParams) (api.UsersUserIdGetRes, error) {

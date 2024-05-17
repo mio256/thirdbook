@@ -2,10 +2,13 @@ package handler_test
 
 import (
 	"context"
+	"strconv"
 	"testing"
 
 	"github.com/go-faker/faker/v4"
+	"github.com/mio256/thirdbook/pkg/infra/rdb"
 	"github.com/mio256/thirdbook/pkg/testutil"
+	"github.com/mio256/thirdbook/pkg/testutil/fixture"
 	"github.com/mio256/thirdbook/pkg/util"
 	"github.com/mio256/thirdbook/ui/api"
 	"github.com/mio256/thirdbook/usecase/handler"
@@ -14,6 +17,9 @@ import (
 
 func TestHandler_UsersPost(t *testing.T) {
 	t.Parallel()
+
+	ctx := context.Background()
+	dbConn := testutil.ConnectDB(t, ctx)
 
 	tests := []struct {
 		name     string
@@ -24,13 +30,13 @@ func TestHandler_UsersPost(t *testing.T) {
 		{
 			name:     "valid",
 			email:    faker.Email(),
-			password: faker.PASSWORD,
+			password: faker.Password(),
 			wantErr:  false,
 		},
 		{
 			name:     "invalid-email",
 			email:    "invalid-email",
-			password: faker.PASSWORD,
+			password: faker.Password(),
 			wantErr:  true,
 		},
 		{
@@ -42,8 +48,6 @@ func TestHandler_UsersPost(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctx := context.Background()
-			dbConn := testutil.ConnectDB(t, ctx)
 			h := handler.NewHandler(dbConn)
 			req := &api.NewUser{
 				Name:     api.OptString{Value: tt.name, Set: true},
@@ -59,6 +63,46 @@ func TestHandler_UsersPost(t *testing.T) {
 				require.NoError(t, util.CompareHashAndPassword(res.Password.Value, tt.password))
 			} else {
 				require.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestHandler_UsersUserIdDelete(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	dbConn := testutil.ConnectDB(t, ctx)
+
+	tests := []struct {
+		name    string
+		user    *rdb.User
+		wantErr bool
+	}{
+		{
+			name:    "valid",
+			user:    fixture.CreateUser(t, ctx, dbConn, nil),
+			wantErr: false,
+		},
+		{
+			// TODO: support notfound in delete sql
+			name:    "invalid-user",
+			user:    &rdb.User{ID: 0},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := handler.NewHandler(dbConn)
+
+			params := api.UsersUserIdDeleteParams{UserId: strconv.FormatInt(tt.user.ID, 10)}
+			res, err := h.UsersUserIdDelete(ctx, params)
+			if !tt.wantErr {
+				require.NoError(t, err)
+				require.Equal(t, &api.UsersUserIdDeleteNoContent{}, res)
+			} else {
+				require.Error(t, err)
+				require.Equal(t, &api.UsersUserIdDeleteNotFound{}, res)
 			}
 		})
 	}
