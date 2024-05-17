@@ -4,8 +4,10 @@ import (
 	"context"
 	"net/mail"
 	"strconv"
+	"unicode/utf8"
 
 	"github.com/mio256/thirdbook/pkg/infra/rdb"
+	"github.com/mio256/thirdbook/pkg/util"
 	"github.com/mio256/thirdbook/ui/api"
 	"github.com/taxio/errors"
 )
@@ -21,10 +23,18 @@ func (h *Handler) UsersPost(ctx context.Context, req *api.NewUser) (*api.User, e
 		return nil, errors.Wrap(err)
 	}
 
+	if utf8.RuneCountInString(req.Password.Value) < 8 {
+		return nil, errors.New("password must be at least 8 characters")
+	}
+	password, err := util.GeneratePasswordHash(req.Password.Value)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
 	user, err := h.repo.CreateUser(ctx, rdb.CreateUserParams{
 		Name:     req.Name.Value,
 		Email:    email,
-		Password: req.Password.Value, // TODO: hash
+		Password: password,
 	})
 	if err != nil {
 		return nil, errors.Wrap(err)
