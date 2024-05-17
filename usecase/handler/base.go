@@ -3,15 +3,25 @@ package handler
 import (
 	"context"
 
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/mio256/thirdbook/pkg/infra"
+	"github.com/mio256/thirdbook/pkg/infra/rdb"
 	"github.com/mio256/thirdbook/ui/api"
 )
 
-type Handler struct{}
+type Handler struct {
+	dbConn *pgxpool.Pool
+	repo   *rdb.Queries
+}
 
 type SecurityHandler struct{}
 
 func NewHandler() *Handler {
-	return &Handler{}
+	dbConn := infra.ConnectDB(context.Background())
+	return &Handler{
+		dbConn: dbConn,
+		repo:   rdb.New(dbConn),
+	}
 }
 
 func NewSecurityHandler() *SecurityHandler {
