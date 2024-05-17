@@ -196,12 +196,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleUsersUserIdGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
-						case "PUT":
-							s.handleUsersUserIdPutRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE,GET,PUT")
+							s.notAllowed(w, r, "DELETE,GET")
 						}
 
 						return
@@ -473,15 +469,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf: UsersUserIdGet
 							r.name = "UsersUserIdGet"
 							r.summary = "Get user details"
-							r.operationID = ""
-							r.pathPattern = "/users/{userId}"
-							r.args = args
-							r.count = 1
-							return r, true
-						case "PUT":
-							// Leaf: UsersUserIdPut
-							r.name = "UsersUserIdPut"
-							r.summary = "Update user details"
 							r.operationID = ""
 							r.pathPattern = "/users/{userId}"
 							r.args = args

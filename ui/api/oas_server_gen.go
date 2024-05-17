@@ -68,12 +68,6 @@ type Handler interface {
 	//
 	// GET /users/{userId}
 	UsersUserIdGet(ctx context.Context, params UsersUserIdGetParams) (UsersUserIdGetRes, error)
-	// UsersUserIdPut implements PUT /users/{userId} operation.
-	//
-	// Update details of an existing user.
-	//
-	// PUT /users/{userId}
-	UsersUserIdPut(ctx context.Context, req *UpdateUser, params UsersUserIdPutParams) (UsersUserIdPutRes, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

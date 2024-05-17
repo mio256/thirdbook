@@ -13,7 +13,28 @@ import (
 )
 
 func (h *Handler) UsersLoginPost(ctx context.Context, req *api.LoginUser) (api.UsersLoginPostRes, error) {
-	panic("not implemented")
+	user, err := h.repo.GetUserByEmail(ctx, req.Email.Value)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
+	err = util.CompareHashAndPassword(user.Password, req.Password.Value)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
+	token, err := util.GenerateToken("thirdbook", util.UserToken{
+		ID:    uint64(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+	})
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
+	return &api.AuthToken{
+		Token: api.OptString{Value: token, Set: true},
+	}, nil
 }
 
 func (h *Handler) UsersPost(ctx context.Context, req *api.NewUser) (*api.User, error) {
@@ -87,8 +108,4 @@ func (h *Handler) UsersUserIdGet(ctx context.Context, params api.UsersUserIdGetP
 		CreatedAt: api.OptDateTime{Value: user.CreatedAt.Time, Set: true},
 		UpdatedAt: api.OptDateTime{Value: user.UpdatedAt.Time, Set: true},
 	}, nil
-}
-
-func (h *Handler) UsersUserIdPut(ctx context.Context, req *api.UpdateUser, params api.UsersUserIdPutParams) (api.UsersUserIdPutRes, error) {
-	panic("not implemented")
 }

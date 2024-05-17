@@ -231,38 +231,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    put:
-      summary: Update user details
-      description: Update details of an existing user.
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          description: ID of the user to update
-          schema:
-            type: string
-      requestBody:
-        description: Updated user details
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUser'
-      responses:
-        '200':
-          description: User updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '404':
-          description: User not found
-        default:
-          description: General Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
       security:
         - BearerAuth: []
     delete:

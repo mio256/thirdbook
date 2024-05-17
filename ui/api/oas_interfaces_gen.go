@@ -24,7 +24,3 @@ type UsersUserIdDeleteRes interface {
 type UsersUserIdGetRes interface {
 	usersUserIdGetRes()
 }
-
-type UsersUserIdPutRes interface {
-	usersUserIdPutRes()
-}

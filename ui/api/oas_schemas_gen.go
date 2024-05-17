@@ -438,46 +438,6 @@ func (s *UpdateBooking) SetStatus(val OptString) {
 	s.Status = val
 }
 
-// Ref: #/components/schemas/UpdateUser
-type UpdateUser struct {
-	// Full name of the user.
-	Name OptString `json:"name"`
-	// Email address of the user.
-	Email OptString `json:"email"`
-	// Password of the user.
-	Password OptString `json:"password"`
-}
-
-// GetName returns the value of Name.
-func (s *UpdateUser) GetName() OptString {
-	return s.Name
-}
-
-// GetEmail returns the value of Email.
-func (s *UpdateUser) GetEmail() OptString {
-	return s.Email
-}
-
-// GetPassword returns the value of Password.
-func (s *UpdateUser) GetPassword() OptString {
-	return s.Password
-}
-
-// SetName sets the value of Name.
-func (s *UpdateUser) SetName(val OptString) {
-	s.Name = val
-}
-
-// SetEmail sets the value of Email.
-func (s *UpdateUser) SetEmail(val OptString) {
-	s.Email = val
-}
-
-// SetPassword sets the value of Password.
-func (s *UpdateUser) SetPassword(val OptString) {
-	s.Password = val
-}
-
 // Ref: #/components/schemas/User
 type User struct {
 	// Unique identifier for the user.
@@ -555,7 +515,6 @@ func (s *User) SetUpdatedAt(val OptDateTime) {
 }
 
 func (*User) usersUserIdGetRes() {}
-func (*User) usersUserIdPutRes() {}
 
 // UsersLoginPostUnauthorized is response for UsersLoginPost operation.
 type UsersLoginPostUnauthorized struct{}
@@ -576,8 +535,3 @@ func (*UsersUserIdDeleteNotFound) usersUserIdDeleteRes() {}
 type UsersUserIdGetNotFound struct{}
 
 func (*UsersUserIdGetNotFound) usersUserIdGetRes() {}
-
-// UsersUserIdPutNotFound is response for UsersUserIdPut operation.
-type UsersUserIdPutNotFound struct{}
-
-func (*UsersUserIdPutNotFound) usersUserIdPutRes() {}
