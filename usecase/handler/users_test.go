@@ -142,7 +142,6 @@ func TestHandler_UsersUserIdGet(t *testing.T) {
 				require.Equal(t, strconv.FormatInt(tt.user.ID, 10), res200.ID.Value)
 				require.Equal(t, tt.user.Name, res200.Name.Value)
 				require.Equal(t, tt.user.Email, res200.Email.Value)
-				require.Equal(t, tt.user.Password, res200.Password.Value)
 			} else {
 				require.Error(t, err)
 				require.Equal(t, &api.UsersUserIdGetNotFound{}, res)

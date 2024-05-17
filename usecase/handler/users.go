@@ -84,7 +84,6 @@ func (h *Handler) UsersUserIdGet(ctx context.Context, params api.UsersUserIdGetP
 		ID:        api.OptString{Value: strconv.FormatInt(user.ID, 10), Set: true},
 		Name:      api.OptString{Value: user.Name, Set: true},
 		Email:     api.OptString{Value: user.Email, Set: true},
-		Password:  api.OptString{Value: user.Password, Set: true},
 		CreatedAt: api.OptDateTime{Value: user.CreatedAt.Time, Set: true},
 		UpdatedAt: api.OptDateTime{Value: user.UpdatedAt.Time, Set: true},
 	}, nil
