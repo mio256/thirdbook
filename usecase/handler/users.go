@@ -56,6 +56,11 @@ func (h *Handler) UsersUserIdDelete(ctx context.Context, params api.UsersUserIdD
 		return nil, errors.Wrap(err)
 	}
 
+	_, err = h.repo.GetUser(ctx, int64(id))
+	if err != nil {
+		return &api.UsersUserIdDeleteNotFound{}, errors.Wrap(err)
+	}
+
 	err = h.repo.DeleteUser(ctx, int64(id))
 	if err != nil {
 		return nil, errors.Wrap(err)
@@ -65,7 +70,24 @@ func (h *Handler) UsersUserIdDelete(ctx context.Context, params api.UsersUserIdD
 }
 
 func (h *Handler) UsersUserIdGet(ctx context.Context, params api.UsersUserIdGetParams) (api.UsersUserIdGetRes, error) {
-	panic("not implemented")
+	id, err := strconv.ParseUint(params.UserId, 10, 64)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+
+	user, err := h.repo.GetUser(ctx, int64(id))
+	if err != nil {
+		return &api.UsersUserIdGetNotFound{}, errors.Wrap(err)
+	}
+
+	return &api.User{
+		ID:        api.OptString{Value: strconv.FormatInt(user.ID, 10), Set: true},
+		Name:      api.OptString{Value: user.Name, Set: true},
+		Email:     api.OptString{Value: user.Email, Set: true},
+		Password:  api.OptString{Value: user.Password, Set: true},
+		CreatedAt: api.OptDateTime{Value: user.CreatedAt.Time, Set: true},
+		UpdatedAt: api.OptDateTime{Value: user.UpdatedAt.Time, Set: true},
+	}, nil
 }
 
 func (h *Handler) UsersUserIdPut(ctx context.Context, req *api.UpdateUser, params api.UsersUserIdPutParams) (api.UsersUserIdPutRes, error) {

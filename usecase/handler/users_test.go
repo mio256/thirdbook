@@ -85,7 +85,6 @@ func TestHandler_UsersUserIdDelete(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			// TODO: support notfound in delete sql
 			name:    "invalid-user",
 			user:    &rdb.User{ID: 0},
 			wantErr: true,
@@ -103,6 +102,50 @@ func TestHandler_UsersUserIdDelete(t *testing.T) {
 			} else {
 				require.Error(t, err)
 				require.Equal(t, &api.UsersUserIdDeleteNotFound{}, res)
+			}
+		})
+	}
+}
+
+func TestHandler_UsersUserIdGet(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	dbConn := testutil.ConnectDB(t, ctx)
+
+	tests := []struct {
+		name    string
+		user    *rdb.User
+		wantErr bool
+	}{
+		{
+			name:    "valid",
+			user:    fixture.CreateUser(t, ctx, dbConn, nil),
+			wantErr: false,
+		},
+		{
+			name:    "invalid-user",
+			user:    &rdb.User{ID: 0},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := handler.NewHandler(dbConn)
+
+			params := api.UsersUserIdGetParams{UserId: strconv.FormatInt(tt.user.ID, 10)}
+			res, err := h.UsersUserIdGet(ctx, params)
+			if !tt.wantErr {
+				require.NoError(t, err)
+				res200, err := res.(*api.User)
+				require.True(t, err)
+				require.Equal(t, strconv.FormatInt(tt.user.ID, 10), res200.ID.Value)
+				require.Equal(t, tt.user.Name, res200.Name.Value)
+				require.Equal(t, tt.user.Email, res200.Email.Value)
+				require.Equal(t, tt.user.Password, res200.Password.Value)
+			} else {
+				require.Error(t, err)
+				require.Equal(t, &api.UsersUserIdGetNotFound{}, res)
 			}
 		})
 	}
