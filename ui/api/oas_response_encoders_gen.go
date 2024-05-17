@@ -13,25 +13,6 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeBookingsBookingIdDeleteResponse(response BookingsBookingIdDeleteRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *BookingsBookingIdDeleteNoContent:
-		w.WriteHeader(204)
-		span.SetStatus(codes.Ok, http.StatusText(204))
-
-		return nil
-
-	case *BookingsBookingIdDeleteNotFound:
-		w.WriteHeader(404)
-		span.SetStatus(codes.Error, http.StatusText(404))
-
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
 func encodeBookingsBookingIdGetResponse(response BookingsBookingIdGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *Booking:
@@ -60,16 +41,9 @@ func encodeBookingsBookingIdGetResponse(response BookingsBookingIdGetRes, w http
 
 func encodeBookingsBookingIdPutResponse(response BookingsBookingIdPutRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *Booking:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
+	case *BookingsBookingIdPutNoContent:
+		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 

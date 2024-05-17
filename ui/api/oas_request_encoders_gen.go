@@ -11,20 +11,6 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeBookingsBookingIdPutRequest(
-	req *UpdateBooking,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeBookingsPostRequest(
 	req *NewBooking,
 	r *http.Request,

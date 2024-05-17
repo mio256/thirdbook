@@ -108,22 +108,16 @@ func (s *Booking) SetStatus(val OptString) {
 }
 
 func (*Booking) bookingsBookingIdGetRes() {}
-func (*Booking) bookingsBookingIdPutRes() {}
-
-// BookingsBookingIdDeleteNoContent is response for BookingsBookingIdDelete operation.
-type BookingsBookingIdDeleteNoContent struct{}
-
-func (*BookingsBookingIdDeleteNoContent) bookingsBookingIdDeleteRes() {}
-
-// BookingsBookingIdDeleteNotFound is response for BookingsBookingIdDelete operation.
-type BookingsBookingIdDeleteNotFound struct{}
-
-func (*BookingsBookingIdDeleteNotFound) bookingsBookingIdDeleteRes() {}
 
 // BookingsBookingIdGetNotFound is response for BookingsBookingIdGet operation.
 type BookingsBookingIdGetNotFound struct{}
 
 func (*BookingsBookingIdGetNotFound) bookingsBookingIdGetRes() {}
+
+// BookingsBookingIdPutNoContent is response for BookingsBookingIdPut operation.
+type BookingsBookingIdPutNoContent struct{}
+
+func (*BookingsBookingIdPutNoContent) bookingsBookingIdPutRes() {}
 
 // BookingsBookingIdPutNotFound is response for BookingsBookingIdPut operation.
 type BookingsBookingIdPutNotFound struct{}
@@ -396,46 +390,6 @@ func (s *PingGetOK) GetMessage() OptString {
 // SetMessage sets the value of Message.
 func (s *PingGetOK) SetMessage(val OptString) {
 	s.Message = val
-}
-
-// Ref: #/components/schemas/UpdateBooking
-type UpdateBooking struct {
-	// Name of the event.
-	Event OptString `json:"event"`
-	// Date and time of the event.
-	Date OptDateTime `json:"date"`
-	// Current status of the booking.
-	Status OptString `json:"status"`
-}
-
-// GetEvent returns the value of Event.
-func (s *UpdateBooking) GetEvent() OptString {
-	return s.Event
-}
-
-// GetDate returns the value of Date.
-func (s *UpdateBooking) GetDate() OptDateTime {
-	return s.Date
-}
-
-// GetStatus returns the value of Status.
-func (s *UpdateBooking) GetStatus() OptString {
-	return s.Status
-}
-
-// SetEvent sets the value of Event.
-func (s *UpdateBooking) SetEvent(val OptString) {
-	s.Event = val
-}
-
-// SetDate sets the value of Date.
-func (s *UpdateBooking) SetDate(val OptDateTime) {
-	s.Date = val
-}
-
-// SetStatus sets the value of Status.
-func (s *UpdateBooking) SetStatus(val OptString) {
-	s.Status = val
 }
 
 // Ref: #/components/schemas/User

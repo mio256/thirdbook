@@ -15,72 +15,6 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// BookingsBookingIdDeleteParams is parameters of DELETE /bookings/{bookingId} operation.
-type BookingsBookingIdDeleteParams struct {
-	// ID of the booking to cancel.
-	BookingId string
-}
-
-func unpackBookingsBookingIdDeleteParams(packed middleware.Parameters) (params BookingsBookingIdDeleteParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "bookingId",
-			In:   "path",
-		}
-		params.BookingId = packed[key].(string)
-	}
-	return params
-}
-
-func decodeBookingsBookingIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params BookingsBookingIdDeleteParams, _ error) {
-	// Decode path: bookingId.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "bookingId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.BookingId = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "bookingId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // BookingsBookingIdGetParams is parameters of GET /bookings/{bookingId} operation.
 type BookingsBookingIdGetParams struct {
 	// ID of the booking to retrieve.
@@ -149,7 +83,7 @@ func decodeBookingsBookingIdGetParams(args [1]string, argsEscaped bool, r *http.
 
 // BookingsBookingIdPutParams is parameters of PUT /bookings/{bookingId} operation.
 type BookingsBookingIdPutParams struct {
-	// ID of the booking to update.
+	// ID of the booking to cancel.
 	BookingId string
 }
 

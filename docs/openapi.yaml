@@ -49,6 +49,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      security:
+        - BearerAuth: [ ]
     post:
       summary: Create a new booking
       description: Create a new booking for a live event.
@@ -72,6 +74,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      security:
+        - BearerAuth: []
 
   /bookings/{bookingId}:
     get:
@@ -99,39 +103,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+      security:
+        - BearerAuth: []
     put:
-      summary: Update a booking
-      description: Update details of an existing booking.
-      parameters:
-        - name: bookingId
-          in: path
-          required: true
-          description: ID of the booking to update
-          schema:
-            type: string
-      requestBody:
-        description: Updated booking details
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateBooking'
-      responses:
-        '200':
-          description: Booking updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Booking'
-        '404':
-          description: Booking not found
-        default:
-          description: General Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
       summary: Cancel a booking
       description: Cancel an existing booking.
       parameters:
@@ -152,7 +126,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
+      security:
+        - BearerAuth: [ ]
   /users:
     post:
       summary: Register a new user

@@ -8,12 +8,6 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// BookingsBookingIdDelete implements DELETE /bookings/{bookingId} operation.
-	//
-	// Cancel an existing booking.
-	//
-	// DELETE /bookings/{bookingId}
-	BookingsBookingIdDelete(ctx context.Context, params BookingsBookingIdDeleteParams) (BookingsBookingIdDeleteRes, error)
 	// BookingsBookingIdGet implements GET /bookings/{bookingId} operation.
 	//
 	// Retrieve details of a specific booking by ID.
@@ -22,10 +16,10 @@ type Handler interface {
 	BookingsBookingIdGet(ctx context.Context, params BookingsBookingIdGetParams) (BookingsBookingIdGetRes, error)
 	// BookingsBookingIdPut implements PUT /bookings/{bookingId} operation.
 	//
-	// Update details of an existing booking.
+	// Cancel an existing booking.
 	//
 	// PUT /bookings/{bookingId}
-	BookingsBookingIdPut(ctx context.Context, req *UpdateBooking, params BookingsBookingIdPutParams) (BookingsBookingIdPutRes, error)
+	BookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (BookingsBookingIdPutRes, error)
 	// BookingsGet implements GET /bookings operation.
 	//
 	// Retrieve a list of all bookings.

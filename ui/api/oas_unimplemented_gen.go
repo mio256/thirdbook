@@ -13,15 +13,6 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// BookingsBookingIdDelete implements DELETE /bookings/{bookingId} operation.
-//
-// Cancel an existing booking.
-//
-// DELETE /bookings/{bookingId}
-func (UnimplementedHandler) BookingsBookingIdDelete(ctx context.Context, params BookingsBookingIdDeleteParams) (r BookingsBookingIdDeleteRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // BookingsBookingIdGet implements GET /bookings/{bookingId} operation.
 //
 // Retrieve details of a specific booking by ID.
@@ -33,10 +24,10 @@ func (UnimplementedHandler) BookingsBookingIdGet(ctx context.Context, params Boo
 
 // BookingsBookingIdPut implements PUT /bookings/{bookingId} operation.
 //
-// Update details of an existing booking.
+// Cancel an existing booking.
 //
 // PUT /bookings/{bookingId}
-func (UnimplementedHandler) BookingsBookingIdPut(ctx context.Context, req *UpdateBooking, params BookingsBookingIdPutParams) (r BookingsBookingIdPutRes, _ error) {
+func (UnimplementedHandler) BookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (r BookingsBookingIdPutRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

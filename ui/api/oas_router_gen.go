@@ -95,10 +95,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "DELETE":
-							s.handleBookingsBookingIdDeleteRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
 						case "GET":
 							s.handleBookingsBookingIdGetRequest([1]string{
 								args[0],
@@ -108,7 +104,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE,GET,PUT")
+							s.notAllowed(w, r, "GET,PUT")
 						}
 
 						return
@@ -339,15 +335,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					if len(elem) == 0 {
 						switch method {
-						case "DELETE":
-							// Leaf: BookingsBookingIdDelete
-							r.name = "BookingsBookingIdDelete"
-							r.summary = "Cancel a booking"
-							r.operationID = ""
-							r.pathPattern = "/bookings/{bookingId}"
-							r.args = args
-							r.count = 1
-							return r, true
 						case "GET":
 							// Leaf: BookingsBookingIdGet
 							r.name = "BookingsBookingIdGet"
@@ -360,7 +347,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "PUT":
 							// Leaf: BookingsBookingIdPut
 							r.name = "BookingsBookingIdPut"
-							r.summary = "Update a booking"
+							r.summary = "Cancel a booking"
 							r.operationID = ""
 							r.pathPattern = "/bookings/{bookingId}"
 							r.args = args
