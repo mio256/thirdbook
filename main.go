@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/mio256/thirdbook/pkg/infra"
 	"github.com/mio256/thirdbook/ui/api"
 	"github.com/mio256/thirdbook/usecase/handler"
 	"github.com/ogen-go/ogen/middleware"
@@ -27,7 +28,8 @@ func main() {
 }
 
 func run(ctx context.Context) error {
-	h := handler.NewHandler()
+	dbConn := infra.ConnectDB(ctx)
+	h := handler.NewHandler(dbConn)
 	s := handler.NewSecurityHandler()
 	srv, err := api.NewServer(h, s, api.WithMiddleware(loggingMiddleware()))
 	if err != nil {
