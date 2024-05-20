@@ -93,15 +93,21 @@ func (s *Booking) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Event.Set {
-			e.FieldStart("event")
-			s.Event.Encode(e)
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
 		}
 	}
 	{
-		if s.Date.Set {
-			e.FieldStart("date")
-			s.Date.Encode(e, json.EncodeDateTime)
+		if s.Start.Set {
+			e.FieldStart("start")
+			s.Start.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
+		if s.End.Set {
+			e.FieldStart("end")
+			s.End.Encode(e, json.EncodeDateTime)
 		}
 	}
 	{
@@ -116,14 +122,29 @@ func (s *Booking) encodeFields(e *jx.Encoder) {
 			s.Status.Encode(e)
 		}
 	}
+	{
+		if s.CreatedAt.Set {
+			e.FieldStart("created_at")
+			s.CreatedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
+		if s.UpdatedAt.Set {
+			e.FieldStart("updated_at")
+			s.UpdatedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
 }
 
-var jsonFieldsNameOfBooking = [5]string{
+var jsonFieldsNameOfBooking = [8]string{
 	0: "id",
-	1: "event",
-	2: "date",
-	3: "user",
-	4: "status",
+	1: "name",
+	2: "start",
+	3: "end",
+	4: "user",
+	5: "status",
+	6: "created_at",
+	7: "updated_at",
 }
 
 // Decode decodes Booking from json.
@@ -144,25 +165,35 @@ func (s *Booking) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "event":
+		case "name":
 			if err := func() error {
-				s.Event.Reset()
-				if err := s.Event.Decode(d); err != nil {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"event\"")
+				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "date":
+		case "start":
 			if err := func() error {
-				s.Date.Reset()
-				if err := s.Date.Decode(d, json.DecodeDateTime); err != nil {
+				s.Start.Reset()
+				if err := s.Start.Decode(d, json.DecodeDateTime); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"date\"")
+				return errors.Wrap(err, "decode field \"start\"")
+			}
+		case "end":
+			if err := func() error {
+				s.End.Reset()
+				if err := s.End.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"end\"")
 			}
 		case "user":
 			if err := func() error {
@@ -184,6 +215,26 @@ func (s *Booking) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
+		case "created_at":
+			if err := func() error {
+				s.CreatedAt.Reset()
+				if err := s.CreatedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"created_at\"")
+			}
+		case "updated_at":
+			if err := func() error {
+				s.UpdatedAt.Reset()
+				if err := s.UpdatedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"updated_at\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -204,6 +255,69 @@ func (s *Booking) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Booking) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *BookingStatus) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *BookingStatus) encodeFields(e *jx.Encoder) {
+	{
+		if s.Status.Set {
+			e.FieldStart("status")
+			s.Status.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfBookingStatus = [1]string{
+	0: "status",
+}
+
+// Decode decodes BookingStatus from json.
+func (s *BookingStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode BookingStatus to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "status":
+			if err := func() error {
+				s.Status.Reset()
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode BookingStatus")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *BookingStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *BookingStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -411,15 +525,21 @@ func (s *NewBooking) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *NewBooking) encodeFields(e *jx.Encoder) {
 	{
-		if s.Event.Set {
-			e.FieldStart("event")
-			s.Event.Encode(e)
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
 		}
 	}
 	{
-		if s.Date.Set {
-			e.FieldStart("date")
-			s.Date.Encode(e, json.EncodeDateTime)
+		if s.Start.Set {
+			e.FieldStart("start")
+			s.Start.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
+		if s.End.Set {
+			e.FieldStart("end")
+			s.End.Encode(e, json.EncodeDateTime)
 		}
 	}
 	{
@@ -430,10 +550,11 @@ func (s *NewBooking) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfNewBooking = [3]string{
-	0: "event",
-	1: "date",
-	2: "user",
+var jsonFieldsNameOfNewBooking = [4]string{
+	0: "name",
+	1: "start",
+	2: "end",
+	3: "user",
 }
 
 // Decode decodes NewBooking from json.
@@ -444,25 +565,35 @@ func (s *NewBooking) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "event":
+		case "name":
 			if err := func() error {
-				s.Event.Reset()
-				if err := s.Event.Decode(d); err != nil {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"event\"")
+				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "date":
+		case "start":
 			if err := func() error {
-				s.Date.Reset()
-				if err := s.Date.Decode(d, json.DecodeDateTime); err != nil {
+				s.Start.Reset()
+				if err := s.Start.Decode(d, json.DecodeDateTime); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"date\"")
+				return errors.Wrap(err, "decode field \"start\"")
+			}
+		case "end":
+			if err := func() error {
+				s.End.Reset()
+				if err := s.End.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"end\"")
 			}
 		case "user":
 			if err := func() error {
@@ -595,6 +726,39 @@ func (s *NewUser) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes BookingStatus as json.
+func (o OptBookingStatus) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes BookingStatus from json.
+func (o *OptBookingStatus) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBookingStatus to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBookingStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBookingStatus) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes time.Time as json.
 func (o OptDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
 	if !o.Set {
@@ -628,6 +792,41 @@ func (s OptDateTime) MarshalJSON() ([]byte, error) {
 func (s *OptDateTime) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d, json.DecodeDateTime)
+}
+
+// Encode encodes int64 as json.
+func (o OptInt64) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Int64(int64(o.Value))
+}
+
+// Decode decodes int64 from json.
+func (o *OptInt64) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt64 to nil")
+	}
+	o.Set = true
+	v, err := d.Int64()
+	if err != nil {
+		return err
+	}
+	o.Value = int64(v)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInt64) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInt64) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
 }
 
 // Encode encodes string as json.

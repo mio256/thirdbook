@@ -87,7 +87,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
-					// Param: "bookingId"
+					// Param: "bookingID"
 					// Leaf parameter
 					args[0] = elem
 					elem = ""
@@ -96,11 +96,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleBookingsBookingIdGetRequest([1]string{
+							s.handleBookingsBookingIDGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						case "PUT":
-							s.handleBookingsBookingIdPutRequest([1]string{
+							s.handleBookingsBookingIDPutRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
@@ -176,7 +176,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 					}
-					// Param: "userId"
+					// Param: "userID"
 					// Leaf parameter
 					args[0] = elem
 					elem = ""
@@ -185,11 +185,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "DELETE":
-							s.handleUsersUserIdDeleteRequest([1]string{
+							s.handleUsersUserIDDeleteRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						case "GET":
-							s.handleUsersUserIdGetRequest([1]string{
+							s.handleUsersUserIDGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
@@ -328,7 +328,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
-					// Param: "bookingId"
+					// Param: "bookingID"
 					// Leaf parameter
 					args[0] = elem
 					elem = ""
@@ -336,20 +336,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							// Leaf: BookingsBookingIdGet
-							r.name = "BookingsBookingIdGet"
+							// Leaf: BookingsBookingIDGet
+							r.name = "BookingsBookingIDGet"
 							r.summary = "Get a specific booking"
 							r.operationID = ""
-							r.pathPattern = "/bookings/{bookingId}"
+							r.pathPattern = "/bookings/{bookingID}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "PUT":
-							// Leaf: BookingsBookingIdPut
-							r.name = "BookingsBookingIdPut"
+							// Leaf: BookingsBookingIDPut
+							r.name = "BookingsBookingIDPut"
 							r.summary = "Cancel a booking"
 							r.operationID = ""
-							r.pathPattern = "/bookings/{bookingId}"
+							r.pathPattern = "/bookings/{bookingID}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -436,7 +436,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 						}
 					}
-					// Param: "userId"
+					// Param: "userID"
 					// Leaf parameter
 					args[0] = elem
 					elem = ""
@@ -444,20 +444,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "DELETE":
-							// Leaf: UsersUserIdDelete
-							r.name = "UsersUserIdDelete"
+							// Leaf: UsersUserIDDelete
+							r.name = "UsersUserIDDelete"
 							r.summary = "Delete a user"
 							r.operationID = ""
-							r.pathPattern = "/users/{userId}"
+							r.pathPattern = "/users/{userID}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "GET":
-							// Leaf: UsersUserIdGet
-							r.name = "UsersUserIdGet"
+							// Leaf: UsersUserIDGet
+							r.name = "UsersUserIDGet"
 							r.summary = "Get user details"
 							r.operationID = ""
-							r.pathPattern = "/users/{userId}"
+							r.pathPattern = "/users/{userID}"
 							r.args = args
 							r.count = 1
 							return r, true

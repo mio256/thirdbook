@@ -58,7 +58,8 @@ func (ns NullBookingType) Value() (driver.Value, error) {
 type Booking struct {
 	ID        int64            `json:"id"`
 	Name      string           `json:"name"`
-	Date      pgtype.Timestamp `json:"date"`
+	StartTime pgtype.Timestamp `json:"start_time"`
+	EndTime   pgtype.Timestamp `json:"end_time"`
 	UserID    int64            `json:"user_id"`
 	Status    BookingType      `json:"status"`
 	CreatedAt pgtype.Timestamp `json:"created_at"`

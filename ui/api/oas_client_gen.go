@@ -23,24 +23,24 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// BookingsBookingIdGet invokes GET /bookings/{bookingId} operation.
+	// BookingsBookingIDGet invokes GET /bookings/{bookingID} operation.
 	//
 	// Retrieve details of a specific booking by ID.
 	//
-	// GET /bookings/{bookingId}
-	BookingsBookingIdGet(ctx context.Context, params BookingsBookingIdGetParams) (BookingsBookingIdGetRes, error)
-	// BookingsBookingIdPut invokes PUT /bookings/{bookingId} operation.
+	// GET /bookings/{bookingID}
+	BookingsBookingIDGet(ctx context.Context, params BookingsBookingIDGetParams) (BookingsBookingIDGetRes, error)
+	// BookingsBookingIDPut invokes PUT /bookings/{bookingID} operation.
 	//
 	// Cancel an existing booking.
 	//
-	// PUT /bookings/{bookingId}
-	BookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (BookingsBookingIdPutRes, error)
+	// PUT /bookings/{bookingID}
+	BookingsBookingIDPut(ctx context.Context, params BookingsBookingIDPutParams) (BookingsBookingIDPutRes, error)
 	// BookingsGet invokes GET /bookings operation.
 	//
-	// Retrieve a list of all bookings.
+	// Retrieve a list of all bookings that meets the conditions.
 	//
 	// GET /bookings
-	BookingsGet(ctx context.Context) ([]Booking, error)
+	BookingsGet(ctx context.Context, params BookingsGetParams) ([]Booking, error)
 	// BookingsPost invokes POST /bookings operation.
 	//
 	// Create a new booking for a live event.
@@ -65,18 +65,18 @@ type Invoker interface {
 	//
 	// POST /users
 	UsersPost(ctx context.Context, request *NewUser) (*User, error)
-	// UsersUserIdDelete invokes DELETE /users/{userId} operation.
+	// UsersUserIDDelete invokes DELETE /users/{userID} operation.
 	//
 	// Delete an existing user.
 	//
-	// DELETE /users/{userId}
-	UsersUserIdDelete(ctx context.Context, params UsersUserIdDeleteParams) (UsersUserIdDeleteRes, error)
-	// UsersUserIdGet invokes GET /users/{userId} operation.
+	// DELETE /users/{userID}
+	UsersUserIDDelete(ctx context.Context, params UsersUserIDDeleteParams) (UsersUserIDDeleteRes, error)
+	// UsersUserIDGet invokes GET /users/{userID} operation.
 	//
 	// Retrieve details of a specific user by ID.
 	//
-	// GET /users/{userId}
-	UsersUserIdGet(ctx context.Context, params UsersUserIdGetParams) (UsersUserIdGetRes, error)
+	// GET /users/{userID}
+	UsersUserIDGet(ctx context.Context, params UsersUserIDGetParams) (UsersUserIDGetRes, error)
 }
 
 // Client implements OAS client.
@@ -133,20 +133,20 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// BookingsBookingIdGet invokes GET /bookings/{bookingId} operation.
+// BookingsBookingIDGet invokes GET /bookings/{bookingID} operation.
 //
 // Retrieve details of a specific booking by ID.
 //
-// GET /bookings/{bookingId}
-func (c *Client) BookingsBookingIdGet(ctx context.Context, params BookingsBookingIdGetParams) (BookingsBookingIdGetRes, error) {
-	res, err := c.sendBookingsBookingIdGet(ctx, params)
+// GET /bookings/{bookingID}
+func (c *Client) BookingsBookingIDGet(ctx context.Context, params BookingsBookingIDGetParams) (BookingsBookingIDGetRes, error) {
+	res, err := c.sendBookingsBookingIDGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendBookingsBookingIdGet(ctx context.Context, params BookingsBookingIdGetParams) (res BookingsBookingIdGetRes, err error) {
+func (c *Client) sendBookingsBookingIDGet(ctx context.Context, params BookingsBookingIDGetParams) (res BookingsBookingIDGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/bookings/{bookingId}"),
+		semconv.HTTPRouteKey.String("/bookings/{bookingID}"),
 	}
 
 	// Run stopwatch.
@@ -161,7 +161,7 @@ func (c *Client) sendBookingsBookingIdGet(ctx context.Context, params BookingsBo
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "BookingsBookingIdGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "BookingsBookingIDGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -181,14 +181,14 @@ func (c *Client) sendBookingsBookingIdGet(ctx context.Context, params BookingsBo
 	var pathParts [2]string
 	pathParts[0] = "/bookings/"
 	{
-		// Encode "bookingId" parameter.
+		// Encode "bookingID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "bookingId",
+			Param:   "bookingID",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.BookingId))
+			return e.EncodeValue(conv.Int64ToString(params.BookingID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -211,7 +211,7 @@ func (c *Client) sendBookingsBookingIdGet(ctx context.Context, params BookingsBo
 		var satisfied bitset
 		{
 			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "BookingsBookingIdGet", r); {
+			switch err := c.securityBearerAuth(ctx, "BookingsBookingIDGet", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -247,7 +247,7 @@ func (c *Client) sendBookingsBookingIdGet(ctx context.Context, params BookingsBo
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeBookingsBookingIdGetResponse(resp)
+	result, err := decodeBookingsBookingIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -255,20 +255,20 @@ func (c *Client) sendBookingsBookingIdGet(ctx context.Context, params BookingsBo
 	return result, nil
 }
 
-// BookingsBookingIdPut invokes PUT /bookings/{bookingId} operation.
+// BookingsBookingIDPut invokes PUT /bookings/{bookingID} operation.
 //
 // Cancel an existing booking.
 //
-// PUT /bookings/{bookingId}
-func (c *Client) BookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (BookingsBookingIdPutRes, error) {
-	res, err := c.sendBookingsBookingIdPut(ctx, params)
+// PUT /bookings/{bookingID}
+func (c *Client) BookingsBookingIDPut(ctx context.Context, params BookingsBookingIDPutParams) (BookingsBookingIDPutRes, error) {
+	res, err := c.sendBookingsBookingIDPut(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendBookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (res BookingsBookingIdPutRes, err error) {
+func (c *Client) sendBookingsBookingIDPut(ctx context.Context, params BookingsBookingIDPutParams) (res BookingsBookingIDPutRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/bookings/{bookingId}"),
+		semconv.HTTPRouteKey.String("/bookings/{bookingID}"),
 	}
 
 	// Run stopwatch.
@@ -283,7 +283,7 @@ func (c *Client) sendBookingsBookingIdPut(ctx context.Context, params BookingsBo
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "BookingsBookingIdPut",
+	ctx, span := c.cfg.Tracer.Start(ctx, "BookingsBookingIDPut",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -303,14 +303,14 @@ func (c *Client) sendBookingsBookingIdPut(ctx context.Context, params BookingsBo
 	var pathParts [2]string
 	pathParts[0] = "/bookings/"
 	{
-		// Encode "bookingId" parameter.
+		// Encode "bookingID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "bookingId",
+			Param:   "bookingID",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.BookingId))
+			return e.EncodeValue(conv.Int64ToString(params.BookingID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -328,39 +328,6 @@ func (c *Client) sendBookingsBookingIdPut(ctx context.Context, params BookingsBo
 		return res, errors.Wrap(err, "create request")
 	}
 
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "BookingsBookingIdPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -369,7 +336,7 @@ func (c *Client) sendBookingsBookingIdPut(ctx context.Context, params BookingsBo
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeBookingsBookingIdPutResponse(resp)
+	result, err := decodeBookingsBookingIDPutResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -379,15 +346,15 @@ func (c *Client) sendBookingsBookingIdPut(ctx context.Context, params BookingsBo
 
 // BookingsGet invokes GET /bookings operation.
 //
-// Retrieve a list of all bookings.
+// Retrieve a list of all bookings that meets the conditions.
 //
 // GET /bookings
-func (c *Client) BookingsGet(ctx context.Context) ([]Booking, error) {
-	res, err := c.sendBookingsGet(ctx)
+func (c *Client) BookingsGet(ctx context.Context, params BookingsGetParams) ([]Booking, error) {
+	res, err := c.sendBookingsGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendBookingsGet(ctx context.Context) (res []Booking, err error) {
+func (c *Client) sendBookingsGet(ctx context.Context, params BookingsGetParams) (res []Booking, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/bookings"),
@@ -425,6 +392,78 @@ func (c *Client) sendBookingsGet(ctx context.Context) (res []Booking, err error)
 	var pathParts [1]string
 	pathParts[0] = "/bookings"
 	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Status.Get(); ok {
+				return val.EncodeURI(e)
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "user" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "user",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.User.Get(); ok {
+				return e.EncodeValue(conv.Int64ToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "start" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "start",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Start.Get(); ok {
+				return e.EncodeValue(conv.DateTimeToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "end" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "end",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.End.Get(); ok {
+				return e.EncodeValue(conv.DateTimeToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
@@ -807,20 +846,20 @@ func (c *Client) sendUsersPost(ctx context.Context, request *NewUser) (res *User
 	return result, nil
 }
 
-// UsersUserIdDelete invokes DELETE /users/{userId} operation.
+// UsersUserIDDelete invokes DELETE /users/{userID} operation.
 //
 // Delete an existing user.
 //
-// DELETE /users/{userId}
-func (c *Client) UsersUserIdDelete(ctx context.Context, params UsersUserIdDeleteParams) (UsersUserIdDeleteRes, error) {
-	res, err := c.sendUsersUserIdDelete(ctx, params)
+// DELETE /users/{userID}
+func (c *Client) UsersUserIDDelete(ctx context.Context, params UsersUserIDDeleteParams) (UsersUserIDDeleteRes, error) {
+	res, err := c.sendUsersUserIDDelete(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendUsersUserIdDelete(ctx context.Context, params UsersUserIdDeleteParams) (res UsersUserIdDeleteRes, err error) {
+func (c *Client) sendUsersUserIDDelete(ctx context.Context, params UsersUserIDDeleteParams) (res UsersUserIDDeleteRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/users/{userId}"),
+		semconv.HTTPRouteKey.String("/users/{userID}"),
 	}
 
 	// Run stopwatch.
@@ -835,7 +874,7 @@ func (c *Client) sendUsersUserIdDelete(ctx context.Context, params UsersUserIdDe
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UsersUserIdDelete",
+	ctx, span := c.cfg.Tracer.Start(ctx, "UsersUserIDDelete",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -855,14 +894,14 @@ func (c *Client) sendUsersUserIdDelete(ctx context.Context, params UsersUserIdDe
 	var pathParts [2]string
 	pathParts[0] = "/users/"
 	{
-		// Encode "userId" parameter.
+		// Encode "userID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "userId",
+			Param:   "userID",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.UserId))
+			return e.EncodeValue(conv.Int64ToString(params.UserID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -885,7 +924,7 @@ func (c *Client) sendUsersUserIdDelete(ctx context.Context, params UsersUserIdDe
 		var satisfied bitset
 		{
 			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "UsersUserIdDelete", r); {
+			switch err := c.securityBearerAuth(ctx, "UsersUserIDDelete", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -921,7 +960,7 @@ func (c *Client) sendUsersUserIdDelete(ctx context.Context, params UsersUserIdDe
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeUsersUserIdDeleteResponse(resp)
+	result, err := decodeUsersUserIDDeleteResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -929,20 +968,20 @@ func (c *Client) sendUsersUserIdDelete(ctx context.Context, params UsersUserIdDe
 	return result, nil
 }
 
-// UsersUserIdGet invokes GET /users/{userId} operation.
+// UsersUserIDGet invokes GET /users/{userID} operation.
 //
 // Retrieve details of a specific user by ID.
 //
-// GET /users/{userId}
-func (c *Client) UsersUserIdGet(ctx context.Context, params UsersUserIdGetParams) (UsersUserIdGetRes, error) {
-	res, err := c.sendUsersUserIdGet(ctx, params)
+// GET /users/{userID}
+func (c *Client) UsersUserIDGet(ctx context.Context, params UsersUserIDGetParams) (UsersUserIDGetRes, error) {
+	res, err := c.sendUsersUserIDGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendUsersUserIdGet(ctx context.Context, params UsersUserIdGetParams) (res UsersUserIdGetRes, err error) {
+func (c *Client) sendUsersUserIDGet(ctx context.Context, params UsersUserIDGetParams) (res UsersUserIDGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/users/{userId}"),
+		semconv.HTTPRouteKey.String("/users/{userID}"),
 	}
 
 	// Run stopwatch.
@@ -957,7 +996,7 @@ func (c *Client) sendUsersUserIdGet(ctx context.Context, params UsersUserIdGetPa
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UsersUserIdGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "UsersUserIDGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -977,14 +1016,14 @@ func (c *Client) sendUsersUserIdGet(ctx context.Context, params UsersUserIdGetPa
 	var pathParts [2]string
 	pathParts[0] = "/users/"
 	{
-		// Encode "userId" parameter.
+		// Encode "userID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "userId",
+			Param:   "userID",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.UserId))
+			return e.EncodeValue(conv.Int64ToString(params.UserID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1007,7 +1046,7 @@ func (c *Client) sendUsersUserIdGet(ctx context.Context, params UsersUserIdGetPa
 		var satisfied bitset
 		{
 			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "UsersUserIdGet", r); {
+			switch err := c.securityBearerAuth(ctx, "UsersUserIDGet", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -1043,7 +1082,7 @@ func (c *Client) sendUsersUserIdGet(ctx context.Context, params UsersUserIdGetPa
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeUsersUserIdGetResponse(resp)
+	result, err := decodeUsersUserIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeBookingsBookingIdGetResponse(resp *http.Response) (res BookingsBookingIdGetRes, _ error) {
+func decodeBookingsBookingIDGetResponse(resp *http.Response) (res BookingsBookingIDGetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -53,7 +53,7 @@ func decodeBookingsBookingIdGetResponse(resp *http.Response) (res BookingsBookin
 		}
 	case 404:
 		// Code 404.
-		return &BookingsBookingIdGetNotFound{}, nil
+		return &BookingsBookingIDGetNotFound{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -100,14 +100,46 @@ func decodeBookingsBookingIdGetResponse(resp *http.Response) (res BookingsBookin
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeBookingsBookingIdPutResponse(resp *http.Response) (res BookingsBookingIdPutRes, _ error) {
+func decodeBookingsBookingIDPutResponse(resp *http.Response) (res BookingsBookingIDPutRes, _ error) {
 	switch resp.StatusCode {
-	case 204:
-		// Code 204.
-		return &BookingsBookingIdPutNoContent{}, nil
+	case 200:
+		// Code 200.
+		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+		if err != nil {
+			return res, errors.Wrap(err, "parse media type")
+		}
+		switch {
+		case ct == "application/json":
+			buf, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return res, err
+			}
+			d := jx.DecodeBytes(buf)
+
+			var response Booking
+			if err := func() error {
+				if err := response.Decode(d); err != nil {
+					return err
+				}
+				if err := d.Skip(); err != io.EOF {
+					return errors.New("unexpected trailing data")
+				}
+				return nil
+			}(); err != nil {
+				err = &ogenerrors.DecodeBodyError{
+					ContentType: ct,
+					Body:        buf,
+					Err:         err,
+				}
+				return res, err
+			}
+			return &response, nil
+		default:
+			return res, validate.InvalidContentType(ct)
+		}
 	case 404:
 		// Code 404.
-		return &BookingsBookingIdPutNotFound{}, nil
+		return &BookingsBookingIDPutNotFound{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -589,14 +621,14 @@ func decodeUsersPostResponse(resp *http.Response) (res *User, _ error) {
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUsersUserIdDeleteResponse(resp *http.Response) (res UsersUserIdDeleteRes, _ error) {
+func decodeUsersUserIDDeleteResponse(resp *http.Response) (res UsersUserIDDeleteRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
-		return &UsersUserIdDeleteNoContent{}, nil
+		return &UsersUserIDDeleteNoContent{}, nil
 	case 404:
 		// Code 404.
-		return &UsersUserIdDeleteNotFound{}, nil
+		return &UsersUserIDDeleteNotFound{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {
@@ -643,7 +675,7 @@ func decodeUsersUserIdDeleteResponse(resp *http.Response) (res UsersUserIdDelete
 	return res, errors.Wrap(defRes, "error")
 }
 
-func decodeUsersUserIdGetResponse(resp *http.Response) (res UsersUserIdGetRes, _ error) {
+func decodeUsersUserIDGetResponse(resp *http.Response) (res UsersUserIDGetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -682,7 +714,7 @@ func decodeUsersUserIdGetResponse(resp *http.Response) (res UsersUserIdGetRes, _
 		}
 	case 404:
 		// Code 404.
-		return &UsersUserIdGetNotFound{}, nil
+		return &UsersUserIDGetNotFound{}, nil
 	}
 	// Convenient error response.
 	defRes, err := func() (res *ErrorStatusCode, err error) {

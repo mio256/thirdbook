@@ -13,30 +13,30 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// BookingsBookingIdGet implements GET /bookings/{bookingId} operation.
+// BookingsBookingIDGet implements GET /bookings/{bookingID} operation.
 //
 // Retrieve details of a specific booking by ID.
 //
-// GET /bookings/{bookingId}
-func (UnimplementedHandler) BookingsBookingIdGet(ctx context.Context, params BookingsBookingIdGetParams) (r BookingsBookingIdGetRes, _ error) {
+// GET /bookings/{bookingID}
+func (UnimplementedHandler) BookingsBookingIDGet(ctx context.Context, params BookingsBookingIDGetParams) (r BookingsBookingIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// BookingsBookingIdPut implements PUT /bookings/{bookingId} operation.
+// BookingsBookingIDPut implements PUT /bookings/{bookingID} operation.
 //
 // Cancel an existing booking.
 //
-// PUT /bookings/{bookingId}
-func (UnimplementedHandler) BookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (r BookingsBookingIdPutRes, _ error) {
+// PUT /bookings/{bookingID}
+func (UnimplementedHandler) BookingsBookingIDPut(ctx context.Context, params BookingsBookingIDPutParams) (r BookingsBookingIDPutRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
 // BookingsGet implements GET /bookings operation.
 //
-// Retrieve a list of all bookings.
+// Retrieve a list of all bookings that meets the conditions.
 //
 // GET /bookings
-func (UnimplementedHandler) BookingsGet(ctx context.Context) (r []Booking, _ error) {
+func (UnimplementedHandler) BookingsGet(ctx context.Context, params BookingsGetParams) (r []Booking, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -76,21 +76,21 @@ func (UnimplementedHandler) UsersPost(ctx context.Context, req *NewUser) (r *Use
 	return r, ht.ErrNotImplemented
 }
 
-// UsersUserIdDelete implements DELETE /users/{userId} operation.
+// UsersUserIDDelete implements DELETE /users/{userID} operation.
 //
 // Delete an existing user.
 //
-// DELETE /users/{userId}
-func (UnimplementedHandler) UsersUserIdDelete(ctx context.Context, params UsersUserIdDeleteParams) (r UsersUserIdDeleteRes, _ error) {
+// DELETE /users/{userID}
+func (UnimplementedHandler) UsersUserIDDelete(ctx context.Context, params UsersUserIDDeleteParams) (r UsersUserIDDeleteRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// UsersUserIdGet implements GET /users/{userId} operation.
+// UsersUserIDGet implements GET /users/{userID} operation.
 //
 // Retrieve details of a specific user by ID.
 //
-// GET /users/{userId}
-func (UnimplementedHandler) UsersUserIdGet(ctx context.Context, params UsersUserIdGetParams) (r UsersUserIdGetRes, _ error) {
+// GET /users/{userID}
+func (UnimplementedHandler) UsersUserIDGet(ctx context.Context, params UsersUserIDGetParams) (r UsersUserIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

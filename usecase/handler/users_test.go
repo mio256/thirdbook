@@ -2,8 +2,8 @@ package handler_test
 
 import (
 	"context"
-	"strconv"
 	"testing"
+	"time"
 
 	"github.com/go-faker/faker/v4"
 	"github.com/mio256/thirdbook/pkg/infra/rdb"
@@ -61,6 +61,12 @@ func TestHandler_UsersPost(t *testing.T) {
 				require.Equal(t, tt.email, res.Email.Value)
 				require.NotEqual(t, tt.password, res.Password.Value)
 				require.NoError(t, util.CompareHashAndPassword(res.Password.Value, tt.password))
+				require.Equal(t, time.Now().Day(), res.CreatedAt.Value.Day())
+				require.Equal(t, time.Now().Day(), res.UpdatedAt.Value.Day())
+
+				t.Cleanup(func() {
+					require.NoError(t, rdb.New(dbConn).TestDeleteUser(ctx, res.ID.Value))
+				})
 			} else {
 				require.Error(t, err)
 			}
@@ -68,7 +74,7 @@ func TestHandler_UsersPost(t *testing.T) {
 	}
 }
 
-func TestHandler_UsersUserIdDelete(t *testing.T) {
+func TestHandler_UsersUserIDDelete(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
@@ -94,20 +100,20 @@ func TestHandler_UsersUserIdDelete(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			h := handler.NewHandler(dbConn)
 
-			params := api.UsersUserIdDeleteParams{UserId: strconv.FormatInt(tt.user.ID, 10)}
-			res, err := h.UsersUserIdDelete(ctx, params)
+			params := api.UsersUserIDDeleteParams{UserID: tt.user.ID}
+			res, err := h.UsersUserIDDelete(ctx, params)
 			if !tt.wantErr {
 				require.NoError(t, err)
-				require.Equal(t, &api.UsersUserIdDeleteNoContent{}, res)
+				require.Equal(t, &api.UsersUserIDDeleteNoContent{}, res)
 			} else {
 				require.Error(t, err)
-				require.Equal(t, &api.UsersUserIdDeleteNotFound{}, res)
+				require.Equal(t, &api.UsersUserIDDeleteNotFound{}, res)
 			}
 		})
 	}
 }
 
-func TestHandler_UsersUserIdGet(t *testing.T) {
+func TestHandler_UsersUserIDGet(t *testing.T) {
 	t.Parallel()
 
 	ctx := context.Background()
@@ -133,18 +139,20 @@ func TestHandler_UsersUserIdGet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			h := handler.NewHandler(dbConn)
 
-			params := api.UsersUserIdGetParams{UserId: strconv.FormatInt(tt.user.ID, 10)}
-			res, err := h.UsersUserIdGet(ctx, params)
+			params := api.UsersUserIDGetParams{UserID: tt.user.ID}
+			res, err := h.UsersUserIDGet(ctx, params)
 			if !tt.wantErr {
 				require.NoError(t, err)
 				res200, err := res.(*api.User)
 				require.True(t, err)
-				require.Equal(t, strconv.FormatInt(tt.user.ID, 10), res200.ID.Value)
+				require.Equal(t, tt.user.ID, res200.ID.Value)
 				require.Equal(t, tt.user.Name, res200.Name.Value)
 				require.Equal(t, tt.user.Email, res200.Email.Value)
+				require.Equal(t, time.Now().Day(), res200.CreatedAt.Value.Day())
+				require.Equal(t, time.Now().Day(), res200.UpdatedAt.Value.Day())
 			} else {
 				require.Error(t, err)
-				require.Equal(t, &api.UsersUserIdGetNotFound{}, res)
+				require.Equal(t, &api.UsersUserIDGetNotFound{}, res)
 			}
 		})
 	}

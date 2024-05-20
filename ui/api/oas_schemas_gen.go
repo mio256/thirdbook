@@ -46,83 +46,130 @@ func (s *BearerAuth) SetToken(val string) {
 // Ref: #/components/schemas/Booking
 type Booking struct {
 	// Unique identifier for the booking.
-	ID OptString `json:"id"`
+	ID OptInt64 `json:"id"`
 	// Name of the event.
-	Event OptString `json:"event"`
-	// Date and time of the event.
-	Date OptDateTime `json:"date"`
+	Name OptString `json:"name"`
+	// Start date-time of the event.
+	Start OptDateTime `json:"start"`
+	// End date-time of the event.
+	End OptDateTime `json:"end"`
 	// User who made the booking.
-	User OptString `json:"user"`
-	// Current status of the booking.
-	Status OptString `json:"status"`
+	User   OptInt64         `json:"user"`
+	Status OptBookingStatus `json:"status"`
+	// Date and time when the booking was created.
+	CreatedAt OptDateTime `json:"created_at"`
+	// Date and time when the booking was last updated.
+	UpdatedAt OptDateTime `json:"updated_at"`
 }
 
 // GetID returns the value of ID.
-func (s *Booking) GetID() OptString {
+func (s *Booking) GetID() OptInt64 {
 	return s.ID
 }
 
-// GetEvent returns the value of Event.
-func (s *Booking) GetEvent() OptString {
-	return s.Event
+// GetName returns the value of Name.
+func (s *Booking) GetName() OptString {
+	return s.Name
 }
 
-// GetDate returns the value of Date.
-func (s *Booking) GetDate() OptDateTime {
-	return s.Date
+// GetStart returns the value of Start.
+func (s *Booking) GetStart() OptDateTime {
+	return s.Start
+}
+
+// GetEnd returns the value of End.
+func (s *Booking) GetEnd() OptDateTime {
+	return s.End
 }
 
 // GetUser returns the value of User.
-func (s *Booking) GetUser() OptString {
+func (s *Booking) GetUser() OptInt64 {
 	return s.User
 }
 
 // GetStatus returns the value of Status.
-func (s *Booking) GetStatus() OptString {
+func (s *Booking) GetStatus() OptBookingStatus {
 	return s.Status
 }
 
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Booking) GetCreatedAt() OptDateTime {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *Booking) GetUpdatedAt() OptDateTime {
+	return s.UpdatedAt
+}
+
 // SetID sets the value of ID.
-func (s *Booking) SetID(val OptString) {
+func (s *Booking) SetID(val OptInt64) {
 	s.ID = val
 }
 
-// SetEvent sets the value of Event.
-func (s *Booking) SetEvent(val OptString) {
-	s.Event = val
+// SetName sets the value of Name.
+func (s *Booking) SetName(val OptString) {
+	s.Name = val
 }
 
-// SetDate sets the value of Date.
-func (s *Booking) SetDate(val OptDateTime) {
-	s.Date = val
+// SetStart sets the value of Start.
+func (s *Booking) SetStart(val OptDateTime) {
+	s.Start = val
+}
+
+// SetEnd sets the value of End.
+func (s *Booking) SetEnd(val OptDateTime) {
+	s.End = val
 }
 
 // SetUser sets the value of User.
-func (s *Booking) SetUser(val OptString) {
+func (s *Booking) SetUser(val OptInt64) {
 	s.User = val
 }
 
 // SetStatus sets the value of Status.
-func (s *Booking) SetStatus(val OptString) {
+func (s *Booking) SetStatus(val OptBookingStatus) {
 	s.Status = val
 }
 
-func (*Booking) bookingsBookingIdGetRes() {}
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Booking) SetCreatedAt(val OptDateTime) {
+	s.CreatedAt = val
+}
 
-// BookingsBookingIdGetNotFound is response for BookingsBookingIdGet operation.
-type BookingsBookingIdGetNotFound struct{}
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *Booking) SetUpdatedAt(val OptDateTime) {
+	s.UpdatedAt = val
+}
 
-func (*BookingsBookingIdGetNotFound) bookingsBookingIdGetRes() {}
+func (*Booking) bookingsBookingIDGetRes() {}
+func (*Booking) bookingsBookingIDPutRes() {}
 
-// BookingsBookingIdPutNoContent is response for BookingsBookingIdPut operation.
-type BookingsBookingIdPutNoContent struct{}
+// Ref: #/components/schemas/BookingStatus
+type BookingStatus struct {
+	// New status for the booking.
+	Status OptString `json:"status"`
+}
 
-func (*BookingsBookingIdPutNoContent) bookingsBookingIdPutRes() {}
+// GetStatus returns the value of Status.
+func (s *BookingStatus) GetStatus() OptString {
+	return s.Status
+}
 
-// BookingsBookingIdPutNotFound is response for BookingsBookingIdPut operation.
-type BookingsBookingIdPutNotFound struct{}
+// SetStatus sets the value of Status.
+func (s *BookingStatus) SetStatus(val OptString) {
+	s.Status = val
+}
 
-func (*BookingsBookingIdPutNotFound) bookingsBookingIdPutRes() {}
+// BookingsBookingIDGetNotFound is response for BookingsBookingIDGet operation.
+type BookingsBookingIDGetNotFound struct{}
+
+func (*BookingsBookingIDGetNotFound) bookingsBookingIDGetRes() {}
+
+// BookingsBookingIDPutNotFound is response for BookingsBookingIDPut operation.
+type BookingsBookingIDPutNotFound struct{}
+
+func (*BookingsBookingIDPutNotFound) bookingsBookingIDPutRes() {}
 
 // Represents error object.
 // Ref: #/components/schemas/Error
@@ -208,40 +255,52 @@ func (s *LoginUser) SetPassword(val OptString) {
 // Ref: #/components/schemas/NewBooking
 type NewBooking struct {
 	// Name of the event.
-	Event OptString `json:"event"`
-	// Date and time of the event.
-	Date OptDateTime `json:"date"`
+	Name OptString `json:"name"`
+	// Start date-time of the event.
+	Start OptDateTime `json:"start"`
+	// End date-time of the event.
+	End OptDateTime `json:"end"`
 	// User making the booking.
-	User OptString `json:"user"`
+	User OptInt64 `json:"user"`
 }
 
-// GetEvent returns the value of Event.
-func (s *NewBooking) GetEvent() OptString {
-	return s.Event
+// GetName returns the value of Name.
+func (s *NewBooking) GetName() OptString {
+	return s.Name
 }
 
-// GetDate returns the value of Date.
-func (s *NewBooking) GetDate() OptDateTime {
-	return s.Date
+// GetStart returns the value of Start.
+func (s *NewBooking) GetStart() OptDateTime {
+	return s.Start
+}
+
+// GetEnd returns the value of End.
+func (s *NewBooking) GetEnd() OptDateTime {
+	return s.End
 }
 
 // GetUser returns the value of User.
-func (s *NewBooking) GetUser() OptString {
+func (s *NewBooking) GetUser() OptInt64 {
 	return s.User
 }
 
-// SetEvent sets the value of Event.
-func (s *NewBooking) SetEvent(val OptString) {
-	s.Event = val
+// SetName sets the value of Name.
+func (s *NewBooking) SetName(val OptString) {
+	s.Name = val
 }
 
-// SetDate sets the value of Date.
-func (s *NewBooking) SetDate(val OptDateTime) {
-	s.Date = val
+// SetStart sets the value of Start.
+func (s *NewBooking) SetStart(val OptDateTime) {
+	s.Start = val
+}
+
+// SetEnd sets the value of End.
+func (s *NewBooking) SetEnd(val OptDateTime) {
+	s.End = val
 }
 
 // SetUser sets the value of User.
-func (s *NewBooking) SetUser(val OptString) {
+func (s *NewBooking) SetUser(val OptInt64) {
 	s.User = val
 }
 
@@ -285,6 +344,52 @@ func (s *NewUser) SetPassword(val OptString) {
 	s.Password = val
 }
 
+// NewOptBookingStatus returns new OptBookingStatus with value set to v.
+func NewOptBookingStatus(v BookingStatus) OptBookingStatus {
+	return OptBookingStatus{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBookingStatus is optional BookingStatus.
+type OptBookingStatus struct {
+	Value BookingStatus
+	Set   bool
+}
+
+// IsSet returns true if OptBookingStatus was set.
+func (o OptBookingStatus) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBookingStatus) Reset() {
+	var v BookingStatus
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBookingStatus) SetTo(v BookingStatus) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBookingStatus) Get() (v BookingStatus, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBookingStatus) Or(d BookingStatus) BookingStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {
 	return OptDateTime{
@@ -325,6 +430,52 @@ func (o OptDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -395,7 +546,7 @@ func (s *PingGetOK) SetMessage(val OptString) {
 // Ref: #/components/schemas/User
 type User struct {
 	// Unique identifier for the user.
-	ID OptString `json:"id"`
+	ID OptInt64 `json:"id"`
 	// Full name of the user.
 	Name OptString `json:"name"`
 	// Email address of the user.
@@ -409,7 +560,7 @@ type User struct {
 }
 
 // GetID returns the value of ID.
-func (s *User) GetID() OptString {
+func (s *User) GetID() OptInt64 {
 	return s.ID
 }
 
@@ -439,7 +590,7 @@ func (s *User) GetUpdatedAt() OptDateTime {
 }
 
 // SetID sets the value of ID.
-func (s *User) SetID(val OptString) {
+func (s *User) SetID(val OptInt64) {
 	s.ID = val
 }
 
@@ -468,24 +619,24 @@ func (s *User) SetUpdatedAt(val OptDateTime) {
 	s.UpdatedAt = val
 }
 
-func (*User) usersUserIdGetRes() {}
+func (*User) usersUserIDGetRes() {}
 
 // UsersLoginPostUnauthorized is response for UsersLoginPost operation.
 type UsersLoginPostUnauthorized struct{}
 
 func (*UsersLoginPostUnauthorized) usersLoginPostRes() {}
 
-// UsersUserIdDeleteNoContent is response for UsersUserIdDelete operation.
-type UsersUserIdDeleteNoContent struct{}
+// UsersUserIDDeleteNoContent is response for UsersUserIDDelete operation.
+type UsersUserIDDeleteNoContent struct{}
 
-func (*UsersUserIdDeleteNoContent) usersUserIdDeleteRes() {}
+func (*UsersUserIDDeleteNoContent) usersUserIDDeleteRes() {}
 
-// UsersUserIdDeleteNotFound is response for UsersUserIdDelete operation.
-type UsersUserIdDeleteNotFound struct{}
+// UsersUserIDDeleteNotFound is response for UsersUserIDDelete operation.
+type UsersUserIDDeleteNotFound struct{}
 
-func (*UsersUserIdDeleteNotFound) usersUserIdDeleteRes() {}
+func (*UsersUserIDDeleteNotFound) usersUserIDDeleteRes() {}
 
-// UsersUserIdGetNotFound is response for UsersUserIdGet operation.
-type UsersUserIdGetNotFound struct{}
+// UsersUserIDGetNotFound is response for UsersUserIDGet operation.
+type UsersUserIDGetNotFound struct{}
 
-func (*UsersUserIdGetNotFound) usersUserIdGetRes() {}
+func (*UsersUserIDGetNotFound) usersUserIDGetRes() {}

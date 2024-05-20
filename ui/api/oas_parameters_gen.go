@@ -5,6 +5,7 @@ package api
 import (
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/go-faster/errors"
 
@@ -15,25 +16,25 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// BookingsBookingIdGetParams is parameters of GET /bookings/{bookingId} operation.
-type BookingsBookingIdGetParams struct {
+// BookingsBookingIDGetParams is parameters of GET /bookings/{bookingID} operation.
+type BookingsBookingIDGetParams struct {
 	// ID of the booking to retrieve.
-	BookingId string
+	BookingID int64
 }
 
-func unpackBookingsBookingIdGetParams(packed middleware.Parameters) (params BookingsBookingIdGetParams) {
+func unpackBookingsBookingIDGetParams(packed middleware.Parameters) (params BookingsBookingIDGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "bookingId",
+			Name: "bookingID",
 			In:   "path",
 		}
-		params.BookingId = packed[key].(string)
+		params.BookingID = packed[key].(int64)
 	}
 	return params
 }
 
-func decodeBookingsBookingIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params BookingsBookingIdGetParams, _ error) {
-	// Decode path: bookingId.
+func decodeBookingsBookingIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params BookingsBookingIDGetParams, _ error) {
+	// Decode path: bookingID.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -45,7 +46,7 @@ func decodeBookingsBookingIdGetParams(args [1]string, argsEscaped bool, r *http.
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "bookingId",
+				Param:   "bookingID",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -57,12 +58,12 @@ func decodeBookingsBookingIdGetParams(args [1]string, argsEscaped bool, r *http.
 					return err
 				}
 
-				c, err := conv.ToString(val)
+				c, err := conv.ToInt64(val)
 				if err != nil {
 					return err
 				}
 
-				params.BookingId = c
+				params.BookingID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -73,7 +74,7 @@ func decodeBookingsBookingIdGetParams(args [1]string, argsEscaped bool, r *http.
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "bookingId",
+			Name: "bookingID",
 			In:   "path",
 			Err:  err,
 		}
@@ -81,25 +82,25 @@ func decodeBookingsBookingIdGetParams(args [1]string, argsEscaped bool, r *http.
 	return params, nil
 }
 
-// BookingsBookingIdPutParams is parameters of PUT /bookings/{bookingId} operation.
-type BookingsBookingIdPutParams struct {
+// BookingsBookingIDPutParams is parameters of PUT /bookings/{bookingID} operation.
+type BookingsBookingIDPutParams struct {
 	// ID of the booking to cancel.
-	BookingId string
+	BookingID int64
 }
 
-func unpackBookingsBookingIdPutParams(packed middleware.Parameters) (params BookingsBookingIdPutParams) {
+func unpackBookingsBookingIDPutParams(packed middleware.Parameters) (params BookingsBookingIDPutParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "bookingId",
+			Name: "bookingID",
 			In:   "path",
 		}
-		params.BookingId = packed[key].(string)
+		params.BookingID = packed[key].(int64)
 	}
 	return params
 }
 
-func decodeBookingsBookingIdPutParams(args [1]string, argsEscaped bool, r *http.Request) (params BookingsBookingIdPutParams, _ error) {
-	// Decode path: bookingId.
+func decodeBookingsBookingIDPutParams(args [1]string, argsEscaped bool, r *http.Request) (params BookingsBookingIDPutParams, _ error) {
+	// Decode path: bookingID.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -111,7 +112,7 @@ func decodeBookingsBookingIdPutParams(args [1]string, argsEscaped bool, r *http.
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "bookingId",
+				Param:   "bookingID",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -123,12 +124,12 @@ func decodeBookingsBookingIdPutParams(args [1]string, argsEscaped bool, r *http.
 					return err
 				}
 
-				c, err := conv.ToString(val)
+				c, err := conv.ToInt64(val)
 				if err != nil {
 					return err
 				}
 
-				params.BookingId = c
+				params.BookingID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -139,7 +140,7 @@ func decodeBookingsBookingIdPutParams(args [1]string, argsEscaped bool, r *http.
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "bookingId",
+			Name: "bookingID",
 			In:   "path",
 			Err:  err,
 		}
@@ -147,25 +148,236 @@ func decodeBookingsBookingIdPutParams(args [1]string, argsEscaped bool, r *http.
 	return params, nil
 }
 
-// UsersUserIdDeleteParams is parameters of DELETE /users/{userId} operation.
-type UsersUserIdDeleteParams struct {
+// BookingsGetParams is parameters of GET /bookings operation.
+type BookingsGetParams struct {
+	// Filter bookings by status.
+	Status OptBookingStatus
+	// Filter bookings by user ID.
+	User OptInt64
+	// Filter bookings by date.
+	Start OptDateTime
+	// Filter bookings by date.
+	End OptDateTime
+}
+
+func unpackBookingsGetParams(packed middleware.Parameters) (params BookingsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "status",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Status = v.(OptBookingStatus)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "user",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.User = v.(OptInt64)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "start",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Start = v.(OptDateTime)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "end",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.End = v.(OptDateTime)
+		}
+	}
+	return params
+}
+
+func decodeBookingsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params BookingsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+			Fields:  []uri.QueryParameterObjectField{{"status", false}},
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotStatusVal BookingStatus
+				if err := func() error {
+					return paramsDotStatusVal.DecodeURI(d)
+				}(); err != nil {
+					return err
+				}
+				params.Status.SetTo(paramsDotStatusVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "status",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: user.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "user",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotUserVal int64
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt64(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotUserVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.User.SetTo(paramsDotUserVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "user",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: start.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "start",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotStartVal time.Time
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToDateTime(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotStartVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Start.SetTo(paramsDotStartVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "start",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: end.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "end",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotEndVal time.Time
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToDateTime(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotEndVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.End.SetTo(paramsDotEndVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "end",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// UsersUserIDDeleteParams is parameters of DELETE /users/{userID} operation.
+type UsersUserIDDeleteParams struct {
 	// ID of the user to delete.
-	UserId string
+	UserID int64
 }
 
-func unpackUsersUserIdDeleteParams(packed middleware.Parameters) (params UsersUserIdDeleteParams) {
+func unpackUsersUserIDDeleteParams(packed middleware.Parameters) (params UsersUserIDDeleteParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "userId",
+			Name: "userID",
 			In:   "path",
 		}
-		params.UserId = packed[key].(string)
+		params.UserID = packed[key].(int64)
 	}
 	return params
 }
 
-func decodeUsersUserIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params UsersUserIdDeleteParams, _ error) {
-	// Decode path: userId.
+func decodeUsersUserIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params UsersUserIDDeleteParams, _ error) {
+	// Decode path: userID.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -177,7 +389,7 @@ func decodeUsersUserIdDeleteParams(args [1]string, argsEscaped bool, r *http.Req
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "userId",
+				Param:   "userID",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -189,12 +401,12 @@ func decodeUsersUserIdDeleteParams(args [1]string, argsEscaped bool, r *http.Req
 					return err
 				}
 
-				c, err := conv.ToString(val)
+				c, err := conv.ToInt64(val)
 				if err != nil {
 					return err
 				}
 
-				params.UserId = c
+				params.UserID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -205,7 +417,7 @@ func decodeUsersUserIdDeleteParams(args [1]string, argsEscaped bool, r *http.Req
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "userId",
+			Name: "userID",
 			In:   "path",
 			Err:  err,
 		}
@@ -213,25 +425,25 @@ func decodeUsersUserIdDeleteParams(args [1]string, argsEscaped bool, r *http.Req
 	return params, nil
 }
 
-// UsersUserIdGetParams is parameters of GET /users/{userId} operation.
-type UsersUserIdGetParams struct {
+// UsersUserIDGetParams is parameters of GET /users/{userID} operation.
+type UsersUserIDGetParams struct {
 	// ID of the user to retrieve.
-	UserId string
+	UserID int64
 }
 
-func unpackUsersUserIdGetParams(packed middleware.Parameters) (params UsersUserIdGetParams) {
+func unpackUsersUserIDGetParams(packed middleware.Parameters) (params UsersUserIDGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "userId",
+			Name: "userID",
 			In:   "path",
 		}
-		params.UserId = packed[key].(string)
+		params.UserID = packed[key].(int64)
 	}
 	return params
 }
 
-func decodeUsersUserIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UsersUserIdGetParams, _ error) {
-	// Decode path: userId.
+func decodeUsersUserIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params UsersUserIDGetParams, _ error) {
+	// Decode path: userID.
 	if err := func() error {
 		param := args[0]
 		if argsEscaped {
@@ -243,7 +455,7 @@ func decodeUsersUserIdGetParams(args [1]string, argsEscaped bool, r *http.Reques
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "userId",
+				Param:   "userID",
 				Value:   param,
 				Style:   uri.PathStyleSimple,
 				Explode: false,
@@ -255,12 +467,12 @@ func decodeUsersUserIdGetParams(args [1]string, argsEscaped bool, r *http.Reques
 					return err
 				}
 
-				c, err := conv.ToString(val)
+				c, err := conv.ToInt64(val)
 				if err != nil {
 					return err
 				}
 
-				params.UserId = c
+				params.UserID = c
 				return nil
 			}(); err != nil {
 				return err
@@ -271,7 +483,7 @@ func decodeUsersUserIdGetParams(args [1]string, argsEscaped bool, r *http.Reques
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "userId",
+			Name: "userID",
 			In:   "path",
 			Err:  err,
 		}

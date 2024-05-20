@@ -33,7 +33,35 @@ paths:
   /bookings:
     get:
       summary: List all bookings
-      description: Retrieve a list of all bookings.
+      description: Retrieve a list of all bookings that meets the conditions.
+      parameters:
+        - name: status
+          in: query
+          description: Filter bookings by status
+          schema:
+            $ref: '#/components/schemas/BookingStatus'
+          required: false
+        - name: user
+          in: query
+          description: Filter bookings by user ID
+          schema:
+              type: integer
+              format: int64
+          required: false
+        - name: start
+          in: query
+          description: Filter bookings by date
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - name: end
+          in: query
+          description: Filter bookings by date
+          schema:
+              type: string
+              format: date-time
+          required: false
       responses:
         '200':
           description: A list of bookings
@@ -75,19 +103,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
 
-  /bookings/{bookingId}:
+  /bookings/{bookingID}:
     get:
       summary: Get a specific booking
       description: Retrieve details of a specific booking by ID.
       parameters:
-        - name: bookingId
+        - name: bookingID
           in: path
           required: true
           description: ID of the booking to retrieve
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: Booking details
@@ -104,20 +133,25 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
     put:
       summary: Cancel a booking
       description: Cancel an existing booking.
       parameters:
-        - name: bookingId
+        - name: bookingID
           in: path
           required: true
           description: ID of the booking to cancel
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
-        '204':
+        '200':
           description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
         '404':
           description: Booking not found
         default:
@@ -126,8 +160,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-      security:
-        - BearerAuth: [ ]
   /users:
     post:
       summary: Register a new user
@@ -180,17 +212,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /users/{userId}:
+  /users/{userID}:
     get:
       summary: Get user details
       description: Retrieve details of a specific user by ID.
       parameters:
-        - name: userId
+        - name: userID
           in: path
           required: true
           description: ID of the user to retrieve
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '200':
           description: User details
@@ -207,17 +240,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
     delete:
       summary: Delete a user
       description: Delete an existing user.
       parameters:
-        - name: userId
+        - name: userID
           in: path
           required: true
           description: ID of the user to delete
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         '204':
           description: User deleted successfully
@@ -230,7 +264,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
       security:
-        - BearerAuth: []
+        - BearerAuth: [ ]
 
 components:
   securitySchemes:
@@ -244,55 +278,72 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: integer
+          format: int64
           description: Unique identifier for the booking
-        event:
+        name:
           type: string
           description: Name of the event
-        date:
+        start:
           type: string
           format: date-time
-          description: Date and time of the event
-        user:
+          description: Start date-time of the event
+        end:
           type: string
+          format: date-time
+          description: End date-time of the event
+        user:
+          type: integer
+          format: int64
           description: User who made the booking
         status:
+          $ref: '#/components/schemas/BookingStatus'
+        created_at:
           type: string
-          description: Current status of the booking
+          format: date-time
+          description: Date and time when the booking was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Date and time when the booking was last updated
 
     NewBooking:
       type: object
       properties:
-        event:
+        name:
           type: string
           description: Name of the event
-        date:
+        start:
           type: string
           format: date-time
-          description: Date and time of the event
-        user:
+          description: Start date-time of the event
+        end:
           type: string
+          format: date-time
+          description: End date-time of the event
+        user:
+          type: integer
+          format: int64
           description: User making the booking
 
-    UpdateBooking:
+    BookingStatus:
       type: object
       properties:
-        event:
-          type: string
-          description: Name of the event
-        date:
-          type: string
-          format: date-time
-          description: Date and time of the event
         status:
           type: string
-          description: Current status of the booking
+          description: New status for the booking
+      enum:
+        - pending
+        - approved
+        - cancelled
+        - rejected
 
     User:
       type: object
       properties:
         id:
-          type: string
+          type: integer
+          format: int64
           description: Unique identifier for the user
         name:
           type: string
@@ -328,19 +379,6 @@ components:
     LoginUser:
       type: object
       properties:
-        email:
-          type: string
-          description: Email address of the user
-        password:
-          type: string
-          description: Password of the user
-
-    UpdateUser:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Full name of the user
         email:
           type: string
           description: Email address of the user

@@ -8,24 +8,24 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// BookingsBookingIdGet implements GET /bookings/{bookingId} operation.
+	// BookingsBookingIDGet implements GET /bookings/{bookingID} operation.
 	//
 	// Retrieve details of a specific booking by ID.
 	//
-	// GET /bookings/{bookingId}
-	BookingsBookingIdGet(ctx context.Context, params BookingsBookingIdGetParams) (BookingsBookingIdGetRes, error)
-	// BookingsBookingIdPut implements PUT /bookings/{bookingId} operation.
+	// GET /bookings/{bookingID}
+	BookingsBookingIDGet(ctx context.Context, params BookingsBookingIDGetParams) (BookingsBookingIDGetRes, error)
+	// BookingsBookingIDPut implements PUT /bookings/{bookingID} operation.
 	//
 	// Cancel an existing booking.
 	//
-	// PUT /bookings/{bookingId}
-	BookingsBookingIdPut(ctx context.Context, params BookingsBookingIdPutParams) (BookingsBookingIdPutRes, error)
+	// PUT /bookings/{bookingID}
+	BookingsBookingIDPut(ctx context.Context, params BookingsBookingIDPutParams) (BookingsBookingIDPutRes, error)
 	// BookingsGet implements GET /bookings operation.
 	//
-	// Retrieve a list of all bookings.
+	// Retrieve a list of all bookings that meets the conditions.
 	//
 	// GET /bookings
-	BookingsGet(ctx context.Context) ([]Booking, error)
+	BookingsGet(ctx context.Context, params BookingsGetParams) ([]Booking, error)
 	// BookingsPost implements POST /bookings operation.
 	//
 	// Create a new booking for a live event.
@@ -50,18 +50,18 @@ type Handler interface {
 	//
 	// POST /users
 	UsersPost(ctx context.Context, req *NewUser) (*User, error)
-	// UsersUserIdDelete implements DELETE /users/{userId} operation.
+	// UsersUserIDDelete implements DELETE /users/{userID} operation.
 	//
 	// Delete an existing user.
 	//
-	// DELETE /users/{userId}
-	UsersUserIdDelete(ctx context.Context, params UsersUserIdDeleteParams) (UsersUserIdDeleteRes, error)
-	// UsersUserIdGet implements GET /users/{userId} operation.
+	// DELETE /users/{userID}
+	UsersUserIDDelete(ctx context.Context, params UsersUserIDDeleteParams) (UsersUserIDDeleteRes, error)
+	// UsersUserIDGet implements GET /users/{userID} operation.
 	//
 	// Retrieve details of a specific user by ID.
 	//
-	// GET /users/{userId}
-	UsersUserIdGet(ctx context.Context, params UsersUserIdGetParams) (UsersUserIdGetRes, error)
+	// GET /users/{userID}
+	UsersUserIDGet(ctx context.Context, params UsersUserIDGetParams) (UsersUserIDGetRes, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

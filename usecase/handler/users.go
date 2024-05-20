@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"net/mail"
-	"strconv"
 	"unicode/utf8"
 
 	"github.com/mio256/thirdbook/pkg/infra/rdb"
@@ -62,7 +61,7 @@ func (h *Handler) UsersPost(ctx context.Context, req *api.NewUser) (*api.User, e
 	}
 
 	return &api.User{
-		ID:        api.OptString{Value: strconv.FormatInt(user.ID, 10), Set: true},
+		ID:        api.OptInt64{Value: user.ID, Set: true},
 		Name:      api.OptString{Value: user.Name, Set: true},
 		Email:     api.OptString{Value: user.Email, Set: true},
 		Password:  api.OptString{Value: user.Password, Set: true},
@@ -71,38 +70,28 @@ func (h *Handler) UsersPost(ctx context.Context, req *api.NewUser) (*api.User, e
 	}, nil
 }
 
-func (h *Handler) UsersUserIdDelete(ctx context.Context, params api.UsersUserIdDeleteParams) (api.UsersUserIdDeleteRes, error) {
-	id, err := strconv.ParseUint(params.UserId, 10, 64)
+func (h *Handler) UsersUserIDDelete(ctx context.Context, params api.UsersUserIDDeleteParams) (api.UsersUserIDDeleteRes, error) {
+	_, err := h.repo.GetUser(ctx, params.UserID)
+	if err != nil {
+		return &api.UsersUserIDDeleteNotFound{}, errors.Wrap(err)
+	}
+
+	err = h.repo.DeleteUser(ctx, params.UserID)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
 
-	_, err = h.repo.GetUser(ctx, int64(id))
-	if err != nil {
-		return &api.UsersUserIdDeleteNotFound{}, errors.Wrap(err)
-	}
-
-	err = h.repo.DeleteUser(ctx, int64(id))
-	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-
-	return &api.UsersUserIdDeleteNoContent{}, nil
+	return &api.UsersUserIDDeleteNoContent{}, nil
 }
 
-func (h *Handler) UsersUserIdGet(ctx context.Context, params api.UsersUserIdGetParams) (api.UsersUserIdGetRes, error) {
-	id, err := strconv.ParseUint(params.UserId, 10, 64)
+func (h *Handler) UsersUserIDGet(ctx context.Context, params api.UsersUserIDGetParams) (api.UsersUserIDGetRes, error) {
+	user, err := h.repo.GetUser(ctx, params.UserID)
 	if err != nil {
-		return nil, errors.Wrap(err)
-	}
-
-	user, err := h.repo.GetUser(ctx, int64(id))
-	if err != nil {
-		return &api.UsersUserIdGetNotFound{}, errors.Wrap(err)
+		return &api.UsersUserIDGetNotFound{}, errors.Wrap(err)
 	}
 
 	return &api.User{
-		ID:        api.OptString{Value: strconv.FormatInt(user.ID, 10), Set: true},
+		ID:        api.OptInt64{Value: user.ID, Set: true},
 		Name:      api.OptString{Value: user.Name, Set: true},
 		Email:     api.OptString{Value: user.Email, Set: true},
 		CreatedAt: api.OptDateTime{Value: user.CreatedAt.Time, Set: true},

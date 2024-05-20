@@ -13,7 +13,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeBookingsBookingIdGetResponse(response BookingsBookingIdGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeBookingsBookingIDGetResponse(response BookingsBookingIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *Booking:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -28,7 +28,7 @@ func encodeBookingsBookingIdGetResponse(response BookingsBookingIdGetRes, w http
 
 		return nil
 
-	case *BookingsBookingIdGetNotFound:
+	case *BookingsBookingIDGetNotFound:
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
 
@@ -39,15 +39,22 @@ func encodeBookingsBookingIdGetResponse(response BookingsBookingIdGetRes, w http
 	}
 }
 
-func encodeBookingsBookingIdPutResponse(response BookingsBookingIdPutRes, w http.ResponseWriter, span trace.Span) error {
+func encodeBookingsBookingIDPutResponse(response BookingsBookingIDPutRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *BookingsBookingIdPutNoContent:
-		w.WriteHeader(204)
-		span.SetStatus(codes.Ok, http.StatusText(204))
+	case *Booking:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
 
 		return nil
 
-	case *BookingsBookingIdPutNotFound:
+	case *BookingsBookingIDPutNotFound:
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
 
@@ -144,15 +151,15 @@ func encodeUsersPostResponse(response *User, w http.ResponseWriter, span trace.S
 	return nil
 }
 
-func encodeUsersUserIdDeleteResponse(response UsersUserIdDeleteRes, w http.ResponseWriter, span trace.Span) error {
+func encodeUsersUserIDDeleteResponse(response UsersUserIDDeleteRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *UsersUserIdDeleteNoContent:
+	case *UsersUserIDDeleteNoContent:
 		w.WriteHeader(204)
 		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 
-	case *UsersUserIdDeleteNotFound:
+	case *UsersUserIDDeleteNotFound:
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
 
@@ -163,7 +170,7 @@ func encodeUsersUserIdDeleteResponse(response UsersUserIdDeleteRes, w http.Respo
 	}
 }
 
-func encodeUsersUserIdGetResponse(response UsersUserIdGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeUsersUserIDGetResponse(response UsersUserIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *User:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -178,7 +185,7 @@ func encodeUsersUserIdGetResponse(response UsersUserIdGetRes, w http.ResponseWri
 
 		return nil
 
-	case *UsersUserIdGetNotFound:
+	case *UsersUserIDGetNotFound:
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
 

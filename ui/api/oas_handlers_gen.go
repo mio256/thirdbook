@@ -19,19 +19,19 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
-// handleBookingsBookingIdGetRequest handles GET /bookings/{bookingId} operation.
+// handleBookingsBookingIDGetRequest handles GET /bookings/{bookingID} operation.
 //
 // Retrieve details of a specific booking by ID.
 //
-// GET /bookings/{bookingId}
-func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /bookings/{bookingID}
+func (s *Server) handleBookingsBookingIDGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/bookings/{bookingId}"),
+		semconv.HTTPRouteKey.String("/bookings/{bookingID}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "BookingsBookingIdGet",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "BookingsBookingIDGet",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -56,7 +56,7 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "BookingsBookingIdGet",
+			Name: "BookingsBookingIDGet",
 			ID:   "",
 		}
 	)
@@ -64,7 +64,7 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityBearerAuth(ctx, "BookingsBookingIdGet", r)
+			sctx, ok, err := s.securityBearerAuth(ctx, "BookingsBookingIDGet", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -106,7 +106,7 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 			return
 		}
 	}
-	params, err := decodeBookingsBookingIdGetParams(args, argsEscaped, r)
+	params, err := decodeBookingsBookingIDGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -117,27 +117,27 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 		return
 	}
 
-	var response BookingsBookingIdGetRes
+	var response BookingsBookingIDGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "BookingsBookingIdGet",
+			OperationName:    "BookingsBookingIDGet",
 			OperationSummary: "Get a specific booking",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "bookingId",
+					Name: "bookingID",
 					In:   "path",
-				}: params.BookingId,
+				}: params.BookingID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = BookingsBookingIdGetParams
-			Response = BookingsBookingIdGetRes
+			Params   = BookingsBookingIDGetParams
+			Response = BookingsBookingIDGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -146,14 +146,14 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 		](
 			m,
 			mreq,
-			unpackBookingsBookingIdGetParams,
+			unpackBookingsBookingIDGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.BookingsBookingIdGet(ctx, params)
+				response, err = s.h.BookingsBookingIDGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.BookingsBookingIdGet(ctx, params)
+		response, err = s.h.BookingsBookingIDGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -172,7 +172,7 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 		return
 	}
 
-	if err := encodeBookingsBookingIdGetResponse(response, w, span); err != nil {
+	if err := encodeBookingsBookingIDGetResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -181,19 +181,19 @@ func (s *Server) handleBookingsBookingIdGetRequest(args [1]string, argsEscaped b
 	}
 }
 
-// handleBookingsBookingIdPutRequest handles PUT /bookings/{bookingId} operation.
+// handleBookingsBookingIDPutRequest handles PUT /bookings/{bookingID} operation.
 //
 // Cancel an existing booking.
 //
-// PUT /bookings/{bookingId}
-func (s *Server) handleBookingsBookingIdPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PUT /bookings/{bookingID}
+func (s *Server) handleBookingsBookingIDPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/bookings/{bookingId}"),
+		semconv.HTTPRouteKey.String("/bookings/{bookingID}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "BookingsBookingIdPut",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "BookingsBookingIDPut",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -218,57 +218,11 @@ func (s *Server) handleBookingsBookingIdPutRequest(args [1]string, argsEscaped b
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "BookingsBookingIdPut",
+			Name: "BookingsBookingIDPut",
 			ID:   "",
 		}
 	)
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			sctx, ok, err := s.securityBearerAuth(ctx, "BookingsBookingIdPut", r)
-			if err != nil {
-				err = &ogenerrors.SecurityError{
-					OperationContext: opErrContext,
-					Security:         "BearerAuth",
-					Err:              err,
-				}
-				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-					recordError("Security:BearerAuth", err)
-				}
-				return
-			}
-			if ok {
-				satisfied[0] |= 1 << 0
-				ctx = sctx
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			err = &ogenerrors.SecurityError{
-				OperationContext: opErrContext,
-				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
-			}
-			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
-				recordError("Security", err)
-			}
-			return
-		}
-	}
-	params, err := decodeBookingsBookingIdPutParams(args, argsEscaped, r)
+	params, err := decodeBookingsBookingIDPutParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -279,27 +233,27 @@ func (s *Server) handleBookingsBookingIdPutRequest(args [1]string, argsEscaped b
 		return
 	}
 
-	var response BookingsBookingIdPutRes
+	var response BookingsBookingIDPutRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "BookingsBookingIdPut",
+			OperationName:    "BookingsBookingIDPut",
 			OperationSummary: "Cancel a booking",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "bookingId",
+					Name: "bookingID",
 					In:   "path",
-				}: params.BookingId,
+				}: params.BookingID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = BookingsBookingIdPutParams
-			Response = BookingsBookingIdPutRes
+			Params   = BookingsBookingIDPutParams
+			Response = BookingsBookingIDPutRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -308,14 +262,14 @@ func (s *Server) handleBookingsBookingIdPutRequest(args [1]string, argsEscaped b
 		](
 			m,
 			mreq,
-			unpackBookingsBookingIdPutParams,
+			unpackBookingsBookingIDPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.BookingsBookingIdPut(ctx, params)
+				response, err = s.h.BookingsBookingIDPut(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.BookingsBookingIdPut(ctx, params)
+		response, err = s.h.BookingsBookingIDPut(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -334,7 +288,7 @@ func (s *Server) handleBookingsBookingIdPutRequest(args [1]string, argsEscaped b
 		return
 	}
 
-	if err := encodeBookingsBookingIdPutResponse(response, w, span); err != nil {
+	if err := encodeBookingsBookingIDPutResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -345,7 +299,7 @@ func (s *Server) handleBookingsBookingIdPutRequest(args [1]string, argsEscaped b
 
 // handleBookingsGetRequest handles GET /bookings operation.
 //
-// Retrieve a list of all bookings.
+// Retrieve a list of all bookings that meets the conditions.
 //
 // GET /bookings
 func (s *Server) handleBookingsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -430,6 +384,16 @@ func (s *Server) handleBookingsGetRequest(args [0]string, argsEscaped bool, w ht
 			return
 		}
 	}
+	params, err := decodeBookingsGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
 
 	var response []Booking
 	if m := s.cfg.Middleware; m != nil {
@@ -439,13 +403,30 @@ func (s *Server) handleBookingsGetRequest(args [0]string, argsEscaped bool, w ht
 			OperationSummary: "List all bookings",
 			OperationID:      "",
 			Body:             nil,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Params: middleware.Parameters{
+				{
+					Name: "status",
+					In:   "query",
+				}: params.Status,
+				{
+					Name: "user",
+					In:   "query",
+				}: params.User,
+				{
+					Name: "start",
+					In:   "query",
+				}: params.Start,
+				{
+					Name: "end",
+					In:   "query",
+				}: params.End,
+			},
+			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = struct{}
+			Params   = BookingsGetParams
 			Response = []Booking
 		)
 		response, err = middleware.HookMiddleware[
@@ -455,14 +436,14 @@ func (s *Server) handleBookingsGetRequest(args [0]string, argsEscaped bool, w ht
 		](
 			m,
 			mreq,
-			nil,
+			unpackBookingsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.BookingsGet(ctx)
+				response, err = s.h.BookingsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.BookingsGet(ctx)
+		response, err = s.h.BookingsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -981,19 +962,19 @@ func (s *Server) handleUsersPostRequest(args [0]string, argsEscaped bool, w http
 	}
 }
 
-// handleUsersUserIdDeleteRequest handles DELETE /users/{userId} operation.
+// handleUsersUserIDDeleteRequest handles DELETE /users/{userID} operation.
 //
 // Delete an existing user.
 //
-// DELETE /users/{userId}
-func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// DELETE /users/{userID}
+func (s *Server) handleUsersUserIDDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/users/{userId}"),
+		semconv.HTTPRouteKey.String("/users/{userID}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "UsersUserIdDelete",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "UsersUserIDDelete",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -1018,7 +999,7 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "UsersUserIdDelete",
+			Name: "UsersUserIDDelete",
 			ID:   "",
 		}
 	)
@@ -1026,7 +1007,7 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityBearerAuth(ctx, "UsersUserIdDelete", r)
+			sctx, ok, err := s.securityBearerAuth(ctx, "UsersUserIDDelete", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1068,7 +1049,7 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 			return
 		}
 	}
-	params, err := decodeUsersUserIdDeleteParams(args, argsEscaped, r)
+	params, err := decodeUsersUserIDDeleteParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1079,27 +1060,27 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 		return
 	}
 
-	var response UsersUserIdDeleteRes
+	var response UsersUserIDDeleteRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "UsersUserIdDelete",
+			OperationName:    "UsersUserIDDelete",
 			OperationSummary: "Delete a user",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "userId",
+					Name: "userID",
 					In:   "path",
-				}: params.UserId,
+				}: params.UserID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = UsersUserIdDeleteParams
-			Response = UsersUserIdDeleteRes
+			Params   = UsersUserIDDeleteParams
+			Response = UsersUserIDDeleteRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1108,14 +1089,14 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 		](
 			m,
 			mreq,
-			unpackUsersUserIdDeleteParams,
+			unpackUsersUserIDDeleteParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.UsersUserIdDelete(ctx, params)
+				response, err = s.h.UsersUserIDDelete(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.UsersUserIdDelete(ctx, params)
+		response, err = s.h.UsersUserIDDelete(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1134,7 +1115,7 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 		return
 	}
 
-	if err := encodeUsersUserIdDeleteResponse(response, w, span); err != nil {
+	if err := encodeUsersUserIDDeleteResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1143,19 +1124,19 @@ func (s *Server) handleUsersUserIdDeleteRequest(args [1]string, argsEscaped bool
 	}
 }
 
-// handleUsersUserIdGetRequest handles GET /users/{userId} operation.
+// handleUsersUserIDGetRequest handles GET /users/{userID} operation.
 //
 // Retrieve details of a specific user by ID.
 //
-// GET /users/{userId}
-func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /users/{userID}
+func (s *Server) handleUsersUserIDGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/users/{userId}"),
+		semconv.HTTPRouteKey.String("/users/{userID}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "UsersUserIdGet",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "UsersUserIDGet",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -1180,7 +1161,7 @@ func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "UsersUserIdGet",
+			Name: "UsersUserIDGet",
 			ID:   "",
 		}
 	)
@@ -1188,7 +1169,7 @@ func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityBearerAuth(ctx, "UsersUserIdGet", r)
+			sctx, ok, err := s.securityBearerAuth(ctx, "UsersUserIDGet", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1230,7 +1211,7 @@ func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w
 			return
 		}
 	}
-	params, err := decodeUsersUserIdGetParams(args, argsEscaped, r)
+	params, err := decodeUsersUserIDGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1241,27 +1222,27 @@ func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w
 		return
 	}
 
-	var response UsersUserIdGetRes
+	var response UsersUserIDGetRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "UsersUserIdGet",
+			OperationName:    "UsersUserIDGet",
 			OperationSummary: "Get user details",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "userId",
+					Name: "userID",
 					In:   "path",
-				}: params.UserId,
+				}: params.UserID,
 			},
 			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = UsersUserIdGetParams
-			Response = UsersUserIdGetRes
+			Params   = UsersUserIDGetParams
+			Response = UsersUserIDGetRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1270,14 +1251,14 @@ func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w
 		](
 			m,
 			mreq,
-			unpackUsersUserIdGetParams,
+			unpackUsersUserIDGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.UsersUserIdGet(ctx, params)
+				response, err = s.h.UsersUserIDGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.UsersUserIdGet(ctx, params)
+		response, err = s.h.UsersUserIDGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1296,7 +1277,7 @@ func (s *Server) handleUsersUserIdGetRequest(args [1]string, argsEscaped bool, w
 		return
 	}
 
-	if err := encodeUsersUserIdGetResponse(response, w, span); err != nil {
+	if err := encodeUsersUserIDGetResponse(response, w, span); err != nil {
 		recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
