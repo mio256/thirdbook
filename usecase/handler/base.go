@@ -2,10 +2,12 @@ package handler
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/mio256/thirdbook/pkg/infra/rdb"
 	"github.com/mio256/thirdbook/ui/api"
+	"github.com/taxio/errors"
 )
 
 type Handler struct {
@@ -27,5 +29,11 @@ func NewSecurityHandler() *SecurityHandler {
 }
 
 func (h *Handler) NewError(ctx context.Context, err error) *api.ErrorStatusCode {
-	panic("not implemented")
+	return &api.ErrorStatusCode{
+		StatusCode: http.StatusUnauthorized,
+		Response: api.Error{
+			Code:    http.StatusUnauthorized,
+			Message: errors.Wrap(err).Error(),
+		},
+	}
 }
