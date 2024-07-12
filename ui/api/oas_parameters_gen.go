@@ -208,7 +208,7 @@ func decodeBookingsGetParams(args [0]string, argsEscaped bool, r *http.Request) 
 			Name:    "status",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
-			Fields:  []uri.QueryParameterObjectField{{"status", false}},
+			Fields:  []uri.QueryParameterObjectField{{Name: "status", Required: false}},
 		}
 
 		if err := q.HasParam(cfg); err == nil {

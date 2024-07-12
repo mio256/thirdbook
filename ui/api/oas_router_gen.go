@@ -50,6 +50,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		switch elem[0] {
 		case '/': // Prefix: "/"
+			origElem := elem
 			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
@@ -61,6 +62,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 			switch elem[0] {
 			case 'b': // Prefix: "bookings"
+				origElem := elem
 				if l := len("bookings"); len(elem) >= l && elem[0:l] == "bookings" {
 					elem = elem[l:]
 				} else {
@@ -81,6 +83,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
+					origElem := elem
 					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
@@ -109,8 +112,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						return
 					}
+
+					elem = origElem
 				}
+
+				elem = origElem
 			case 'p': // Prefix: "ping"
+				origElem := elem
 				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
 					elem = elem[l:]
 				} else {
@@ -128,7 +136,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					return
 				}
+
+				elem = origElem
 			case 'u': // Prefix: "users"
+				origElem := elem
 				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
 					elem = elem[l:]
 				} else {
@@ -147,6 +158,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
+					origElem := elem
 					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
@@ -158,6 +170,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 					switch elem[0] {
 					case 'l': // Prefix: "login"
+						origElem := elem
 						if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
 							elem = elem[l:]
 						} else {
@@ -175,6 +188,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 							return
 						}
+
+						elem = origElem
 					}
 					// Param: "userID"
 					// Leaf parameter
@@ -198,8 +213,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						return
 					}
+
+					elem = origElem
 				}
+
+				elem = origElem
 			}
+
+			elem = origElem
 		}
 	}
 	s.notFound(w, r)
@@ -281,6 +302,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 		}
 		switch elem[0] {
 		case '/': // Prefix: "/"
+			origElem := elem
 			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 				elem = elem[l:]
 			} else {
@@ -292,6 +314,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			}
 			switch elem[0] {
 			case 'b': // Prefix: "bookings"
+				origElem := elem
 				if l := len("bookings"); len(elem) >= l && elem[0:l] == "bookings" {
 					elem = elem[l:]
 				} else {
@@ -322,6 +345,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
+					origElem := elem
 					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
@@ -334,9 +358,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					elem = ""
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch method {
 						case "GET":
-							// Leaf: BookingsBookingIDGet
 							r.name = "BookingsBookingIDGet"
 							r.summary = "Get a specific booking"
 							r.operationID = ""
@@ -345,7 +369,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.count = 1
 							return r, true
 						case "PUT":
-							// Leaf: BookingsBookingIDPut
 							r.name = "BookingsBookingIDPut"
 							r.summary = "Cancel a booking"
 							r.operationID = ""
@@ -357,8 +380,13 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
+
+					elem = origElem
 				}
+
+				elem = origElem
 			case 'p': // Prefix: "ping"
+				origElem := elem
 				if l := len("ping"); len(elem) >= l && elem[0:l] == "ping" {
 					elem = elem[l:]
 				} else {
@@ -366,9 +394,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
+					// Leaf node.
 					switch method {
 					case "GET":
-						// Leaf: PingGet
 						r.name = "PingGet"
 						r.summary = "Ping the server"
 						r.operationID = ""
@@ -380,7 +408,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						return
 					}
 				}
+
+				elem = origElem
 			case 'u': // Prefix: "users"
+				origElem := elem
 				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
 					elem = elem[l:]
 				} else {
@@ -403,6 +434,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
+					origElem := elem
 					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
@@ -414,6 +446,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 					switch elem[0] {
 					case 'l': // Prefix: "login"
+						origElem := elem
 						if l := len("login"); len(elem) >= l && elem[0:l] == "login" {
 							elem = elem[l:]
 						} else {
@@ -421,9 +454,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
+							// Leaf node.
 							switch method {
 							case "POST":
-								// Leaf: UsersLoginPost
 								r.name = "UsersLoginPost"
 								r.summary = "Login a user"
 								r.operationID = ""
@@ -435,6 +468,8 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								return
 							}
 						}
+
+						elem = origElem
 					}
 					// Param: "userID"
 					// Leaf parameter
@@ -442,9 +477,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					elem = ""
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch method {
 						case "DELETE":
-							// Leaf: UsersUserIDDelete
 							r.name = "UsersUserIDDelete"
 							r.summary = "Delete a user"
 							r.operationID = ""
@@ -453,7 +488,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.count = 1
 							return r, true
 						case "GET":
-							// Leaf: UsersUserIDGet
 							r.name = "UsersUserIDGet"
 							r.summary = "Get user details"
 							r.operationID = ""
@@ -465,8 +499,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
+
+					elem = origElem
 				}
+
+				elem = origElem
 			}
+
+			elem = origElem
 		}
 	}
 	return r, false
